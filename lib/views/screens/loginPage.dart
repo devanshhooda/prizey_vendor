@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:prizey_vendor/services/userServices.dart';
 import 'package:prizey_vendor/utils/sizeConfig.dart';
+import 'package:provider/provider.dart';
+
 import '../../main.dart';
+import 'numberSignUp.dart';
 
 TextStyle inputTextStyle = TextStyle(
     fontSize: SizeConfig.safeBlockHorizontal * 4.5,
@@ -16,13 +20,13 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   TextEditingController _phNum = new TextEditingController();
-  TextEditingController _pass = new TextEditingController();
+  TextEditingController _otp = new TextEditingController();
 
-  String errorMsg = "";
+  // String errorMsg = "";
 
   Color phnClr = Colors.black12;
   Color passClr = Colors.black12;
-
+  bool isOtpSent = false;
   void phoneChangeColor(String input) {
     setState(() {
       if (input.isNotEmpty) {
@@ -43,14 +47,9 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  void detectError() {
-    setState(() {
-      errorMsg = "Above fields can't be empty";
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    final userAuth = Provider.of<UserAuth>(context);
     return new Scaffold(
       body: new Container(
         height: SizeConfig.screenHeight,
@@ -122,7 +121,33 @@ class _LoginPageState extends State<LoginPage> {
                       phoneChangeColor(phn);
                     },
                   )),
-              // )
+            ),
+            SizedBox(
+              height: SizeConfig.safeBlockVertical * 2,
+            ),
+            new Container(
+              height: SizeConfig.blockSizeVertical * 6,
+              padding: EdgeInsets.only(
+                  left: SizeConfig.safeBlockHorizontal * 25,
+                  right: SizeConfig.safeBlockHorizontal * 25),
+              child: new RaisedButton(
+                onPressed: () async {
+                  String phoneNumber = _phNum.text;
+                  isOtpSent = await userAuth.sendOtp(phoneNumber);
+                },
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                color: Colors.green,
+                elevation: 0,
+                child: new Container(
+                  child: new Text(
+                    'Send OTP',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: SizeConfig.safeBlockHorizontal * 4.5),
+                  ),
+                ),
+              ),
             ),
             SizedBox(
               height: SizeConfig.safeBlockVertical * 5,
@@ -144,12 +169,13 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 child: new TextField(
                   obscureText: true,
-                  controller: _pass,
+                  controller: _otp,
                   style: inputTextStyle,
                   cursorWidth: 2.5,
                   cursorColor: Colors.indigo,
+                  enabled: isOtpSent,
                   decoration: InputDecoration(
-                    hintText: 'Password',
+                    hintText: 'OTP',
                     hintStyle: hintStyle,
                     border: InputBorder.none,
                     icon: Icon(
@@ -157,42 +183,15 @@ class _LoginPageState extends State<LoginPage> {
                       size: SizeConfig.safeBlockVertical * 3,
                     ),
                   ),
-                  onChanged: (String phn) {
-                    phn = _pass.text;
-                    passChangeColor(phn);
+                  onChanged: (String otp) {
+                    otp = _otp.text;
+                    passChangeColor(otp);
                   },
                 ),
-                // )
-              ),
-            ),
-            SizedBox(
-              height: SizeConfig.safeBlockVertical * 3,
-            ),
-            new Container(
-              padding:
-                  EdgeInsets.only(left: SizeConfig.safeBlockHorizontal * 43),
-              child: FlatButton(
-                onPressed: () => print('Forgot Passwod process'),
-                child: new Text('Forgot Password ?',
-                    style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: SizeConfig.safeBlockHorizontal * 4,
-                        fontWeight: FontWeight.w500)),
               ),
             ),
             SizedBox(
               height: SizeConfig.safeBlockVertical * 2,
-            ),
-            new Container(
-              padding:
-                  EdgeInsets.only(left: SizeConfig.safeBlockHorizontal * 30),
-              child: new Text(
-                errorMsg,
-                style: TextStyle(color: Colors.red),
-              ),
-            ),
-            SizedBox(
-              height: SizeConfig.safeBlockVertical * 3,
             ),
             new Container(
               height: SizeConfig.blockSizeVertical * 6,
@@ -200,13 +199,23 @@ class _LoginPageState extends State<LoginPage> {
                   left: SizeConfig.safeBlockHorizontal * 25,
                   right: SizeConfig.safeBlockHorizontal * 25),
               child: new RaisedButton(
-                onPressed: () {
-                  if (_phNum.text.isEmpty || _pass.text.isEmpty) {
-                    detectError();
-                  } else {
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => MyApp()),
-                        ModalRoute.withName(''));
+                onPressed: () async {
+                  String otp = _otp.text;
+                  bool otpVerified = await userAuth.verifyOtp(otp);
+                  bool userExist = await userAuth.getRegisteredUser();
+                  if (otpVerified) {
+                    if (userExist) {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => MyApp()),
+                          ModalRoute.withName(''));
+                      print('User exist hence logged in');
+                    } else {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => PhoneNumber()),
+                          ModalRoute.withName('/'));
+                      print('User does\'t exist hence sign up screen');
+                    }
                   }
                 },
                 shape: RoundedRectangleBorder(
@@ -215,16 +224,29 @@ class _LoginPageState extends State<LoginPage> {
                 elevation: 0,
                 child: new Container(
                   child: new Text(
-                    'Login',
+                    'Verify & Login',
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: SizeConfig.safeBlockHorizontal * 5),
+                        fontSize: SizeConfig.safeBlockHorizontal * 4.5),
                   ),
                 ),
               ),
             ),
             SizedBox(
               height: SizeConfig.safeBlockVertical * 4,
+            ),
+            new Container(
+              padding:
+                  EdgeInsets.only(left: SizeConfig.safeBlockHorizontal * 30),
+              child: new Text(
+                userAuth.verifyOtpMsg.isEmpty
+                    ? userAuth.sendOtpMsg
+                    : userAuth.verifyOtpMsg,
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+            SizedBox(
+              height: SizeConfig.safeBlockVertical * 3,
             ),
             new Container(
               padding:

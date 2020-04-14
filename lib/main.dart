@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:prizey_vendor/services/userServices.dart';
 import 'package:prizey_vendor/views/screens/options.dart';
 import 'package:prizey_vendor/views/screens/selectCategoryPage.dart';
+import 'package:provider/provider.dart';
 import 'utils/sizeConfig.dart';
 import 'views/appBar.dart';
 import 'views/screens/profilePage.dart';
@@ -10,15 +12,30 @@ import 'views/screens/requestsPage.dart';
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-  runApp(new MaterialApp(
-    debugShowCheckedModeBanner: false,
-    theme: ThemeData(
-      primarySwatch: Colors.indigo,
-      primaryColor: Colors.indigoAccent,
-    ),
-    home: OptionsPage(),
-    // home: SelectCategory(),
-  ));
+  runApp(PrizeyVendorApp());
+}
+
+class PrizeyVendorApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => UserAuth(),
+          child: SelectCategory(),
+        )
+      ],
+      child: new MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.indigo,
+          primaryColor: Colors.indigoAccent,
+        ),
+        home: OptionsPage(),
+        // home: SelectCategory(),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatefulWidget {

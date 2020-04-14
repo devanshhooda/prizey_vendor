@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prizey_vendor/utils/sizeConfig.dart';
-import 'package:prizey_vendor/views/screens/selectCategoryPage.dart';
 import 'options.dart';
-
-List categories = selectedCategories;
 
 TextStyle _infolabelSyle = new TextStyle(
     fontSize: SizeConfig.safeBlockHorizontal * 4,
@@ -48,22 +45,22 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             info(context),
-            new Padding(
-                padding: new EdgeInsets.only(
-                    left: SizeConfig.safeBlockHorizontal * 10,
-                    top: SizeConfig.safeBlockVertical * 1.5),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      'Categories: ',
-                      style: _infolabelSyle,
-                    ),
-                    Text(
-                      '${categories.toString()}',
-                      style: _infoStyle,
-                    ),
-                  ],
-                )),
+            // new Padding(
+            //     padding: new EdgeInsets.only(
+            //         left: SizeConfig.safeBlockHorizontal * 10,
+            //         top: SizeConfig.safeBlockVertical * 1.5),
+            //     child: Row(
+            //       children: <Widget>[
+            //         Text(
+            //           'Categories: ',
+            //           style: _infolabelSyle,
+            //         ),
+            //         Text(
+            //           '${categories.toString()}',
+            //           style: _infoStyle,
+            //         ),
+            //       ],
+            //     )),
             new Padding(
               padding: EdgeInsets.only(
                   left: SizeConfig.safeBlockHorizontal * 30,

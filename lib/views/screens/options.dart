@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prizey_vendor/utils/sizeConfig.dart';
 import 'loginPage.dart';
-import 'signUpPage.dart';
+import 'numberSignUp.dart';
 
 class OptionsPage extends StatelessWidget {
   @override
@@ -80,8 +80,8 @@ Widget _options(BuildContext context) {
                       child: new MaterialButton(
                         onPressed: () {
                           print('Sign Up page');
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) => Name()));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => PhoneNumber()));
                         },
                         child: new Text(
                           'Sign Up',
