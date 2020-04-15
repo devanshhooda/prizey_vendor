@@ -150,21 +150,21 @@ class UserAuth with ChangeNotifier {
         print("Asked to create new User:");
         print(token);
         print('token : $token');
-        var categories = json.encode(categoryId);
+        var body = json.encode({
+          'type': 'Vendor',
+          'token': 'Firebase Token',
+          'firstName': firstName,
+          'lastName': lastName,
+          'address': address,
+          'categories': categoryId
+        });
         http.Response response = await http.post(
           addUserUrl,
           headers: <String, String>{
             'Authorization': 'jwt ' + token,
             'Content-type': 'application/json'
           },
-          body: {
-            'type': 'Vendor',
-            'token': 'Firebase Token',
-            'firstName': firstName,
-            'lastName': lastName,
-            'address': address,
-            'categories': categories,
-          },
+          body: body
         );
         var data = json.decode(response.body);
         print("Create User Request: ");
