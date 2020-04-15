@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prizey_vendor/main.dart';
 import 'package:prizey_vendor/models/categoriesModel.dart';
 import 'package:prizey_vendor/services/userServices.dart';
 import 'package:prizey_vendor/utils/sizeConfig.dart';
@@ -11,23 +12,12 @@ class SelectCategory extends StatefulWidget {
 
 class _SelectCategoryState extends State<SelectCategory> {
   List<String> categoriesTitle = List<String>();
-  // List<String> categoriesTitle = ['Laptop', 'Mattress', 'Electronics', 'Food'];
   List<String> selectedCategories = List<String>();
-  // List<String> selectedCategories = [];
   List<bool> _value = List<bool>();
-  // List<bool> _value = [false, false, false, false];
-
-  String errorMsg = "";
-
-  void detectError() {
-    setState(() {
-      errorMsg = "Above field can't be empty";
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    UserAuth content = Provider.of<UserAuth>(context, listen: false);
+    UserAuth service = Provider.of<UserAuth>(context);
     return Scaffold(
       body: Container(
         height: SizeConfig.screenHeight,
@@ -38,7 +28,7 @@ class _SelectCategoryState extends State<SelectCategory> {
             new Container(
               padding: EdgeInsets.only(
                   right: SizeConfig.safeBlockHorizontal * 70,
-                  top: SizeConfig.safeBlockVertical * 5),
+                  top: SizeConfig.safeBlockVertical * 5.5),
               child: new CircleAvatar(
                 radius: SizeConfig.blockSizeVertical * 2.2,
                 backgroundColor: Colors.indigoAccent,
@@ -55,7 +45,6 @@ class _SelectCategoryState extends State<SelectCategory> {
             Padding(
               padding: EdgeInsets.only(
                 top: SizeConfig.safeBlockVertical * 5,
-                // left: SizeConfig.safeBlockHorizontal * 20
               ),
               child: Text(
                 'Apply to be a vendor',
@@ -70,7 +59,6 @@ class _SelectCategoryState extends State<SelectCategory> {
             Padding(
               padding: EdgeInsets.only(
                 top: SizeConfig.blockSizeVertical * 1,
-                // left: SizeConfig.safeBlockHorizontal * 25
               ),
               child: Text(
                 'Select categories :',
@@ -85,22 +73,10 @@ class _SelectCategoryState extends State<SelectCategory> {
                     left: SizeConfig.safeBlockHorizontal * 3,
                     right: SizeConfig.safeBlockHorizontal * 3,
                   ),
-                  // padding: EdgeInsets.only(
-                  //   left: SizeConfig.safeBlockHorizontal * 5,
-                  // ),
-                  decoration: BoxDecoration(
-                      // color: Colors.black12,
-                      borderRadius: BorderRadius.circular(10)),
-                  // child: new GridView.builder(
-                  //     itemCount: 4,
-                  //     gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                  //         crossAxisCount: 2),
-                  //     itemBuilder: (BuildContext context, int index) {
-                  //       // _value.add(false);
-                  //       return categories(index);
-                  //     }),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(10)),
                   child: FutureBuilder<List<CategoriesModel>>(
-                      future: content.getCategories(),
+                      future: service.getCategories(),
                       builder: (BuildContext context,
                           AsyncSnapshot<List<CategoriesModel>> snapshot) {
                         if (snapshot.hasData) {
@@ -110,7 +86,6 @@ class _SelectCategoryState extends State<SelectCategory> {
                                   new SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 2),
                               itemBuilder: (BuildContext context, int i) {
-                                _value.add(false);
                                 String categoryName = snapshot.data[i].name;
                                 categoriesTitle.add(categoryName);
                                 _value.add(false);
@@ -120,42 +95,9 @@ class _SelectCategoryState extends State<SelectCategory> {
                               });
                         }
                         return Center(child: CircularProgressIndicator());
-                      })
-                  // child: FutureBuilder<List<CategoriesModel>>(
-                  //     future: content.getCategories(),
-                  //     builder: (BuildContext context,
-                  //         AsyncSnapshot<List<CategoriesModel>> snapshot) {
-                  //       if (snapshot.hasData) {
-                  //         return ListView.builder(
-                  //             shrinkWrap: true,
-                  //             itemCount: snapshot.data.length,
-                  //             itemBuilder: (context, i) {
-                  //               String categoryName = snapshot.data[i].name;
-                  // categoriesTitle.add(categoryName);
-                  // _value.add(false);
-                  // String categoryId = snapshot.data[i].id;
-                  //               return _categories(i, categoryId);
-                  //             });
-                  //       }
-                  //       return Center(child: CircularProgressIndicator());
-                  //     })
-                  // child: Column(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //   children: <Widget>[
-                  //     _categories(0),
-                  //     _categories(1),
-                  //     _categories(2),
-                  //     _categories(3),
-                  //   ],
-                  // ),
-                  // child: ListView.builder(
-                  //     itemCount: 4,
-                  //     itemBuilder: (context, i) {
-                  //       return categories(i);
-                  //     }),
-                  ),
+                      })),
             ),
-            // Text(errorMsg, style: TextStyle(color: Colors.red)),
+            Text(service.detailsPageMsg, style: TextStyle(color: Colors.red)),
             SizedBox(
               height: SizeConfig.safeBlockVertical * 2,
             ),
@@ -165,19 +107,16 @@ class _SelectCategoryState extends State<SelectCategory> {
                 margin:
                     EdgeInsets.only(bottom: SizeConfig.safeBlockVertical * 3),
                 height: SizeConfig.blockSizeVertical * 5.5,
-                // padding: EdgeInsets.only(
-                //     left: SizeConfig.safeBlockHorizontal * 25,
-                //     right: SizeConfig.safeBlockHorizontal * 25),
                 child: new RaisedButton(
-                  onPressed: () {
-                    // if (_address.text.isNotEmpty &&
-                    //     selectedCategories.isNotEmpty) {
-                    print('HomePage Screen');
-                    //   Navigator.of(context).push(
-                    //       MaterialPageRoute(builder: (context) => Password()));
-                    // } else {
-                    //   detectError();
-                    // }
+                  onPressed: () async {
+                    bool userCreated =
+                        await service.createUser(selectedCategories);
+                    if (userCreated) {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => MyApp()),
+                          ModalRoute.withName(''));
+                      print('Singed Up');
+                    }
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
@@ -205,63 +144,49 @@ class _SelectCategoryState extends State<SelectCategory> {
 
   Widget _categories(int i, String categoryId, String imageUrl) {
     return new Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20), color: Colors.grey),
       margin: EdgeInsets.all(5),
-      color: Colors.black12,
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          // FlutterLogo(
-          //   size: 100,
-          // ),
-          Image.network(
-            imageUrl,
-            fit: BoxFit.fill,
+          Container(
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.fill,
+            ),
           ),
-          CheckboxListTile(
-              value: _value[i],
-              title: new Text(categoriesTitle[i]),
-              controlAffinity: ListTileControlAffinity.leading,
-              onChanged: (val) {
-                setState(() {
-                  _value[i] = val;
-                  if (val) {
-                    selectedCategories.add(categoryId);
-                  } else {
-                    selectedCategories.remove(categoryId);
-                  }
-                });
-              })
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20)),
+              color: Colors.grey,
+            ),
+            margin: EdgeInsets.only(
+              top: 145,
+            ),
+            padding: EdgeInsets.only(top: 0),
+            child: CheckboxListTile(
+                value: _value[i],
+                title: new Text(
+                  categoriesTitle[i],
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                ),
+                onChanged: (val) {
+                  setState(() {
+                    _value[i] = val;
+                    if (val) {
+                      selectedCategories.add(categoryId);
+                    } else {
+                      selectedCategories.remove(categoryId);
+                    }
+                  });
+                }),
+          ),
         ],
       ),
     );
   }
-
-  // Widget categories(int i) {
-  //   return new Container(
-  //     margin: EdgeInsets.all(5),
-  //     color: Colors.black12,
-  //     child: Stack(
-  //       alignment: Alignment.center,
-  //       children: <Widget>[
-  //         FlutterLogo(
-  //           size: 100,
-  //         ),
-  //         CheckboxListTile(
-  //             value: _value[i],
-  //             title: new Text(categoriesTitle[i]),
-  //             controlAffinity: ListTileControlAffinity.leading,
-  //             onChanged: (val) {
-  //               setState(() {
-  //                 _value[i] = val;
-  //                 if (val) {
-  //                   selectedCategories.add(categoriesTitle[i]);
-  //                 } else {
-  //                   selectedCategories.remove(categoriesTitle[i]);
-  //                 }
-  //               });
-  //             })
-  //       ],
-  //     ),
-  //   );
-  // }
 }

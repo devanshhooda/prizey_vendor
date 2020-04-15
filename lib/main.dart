@@ -6,8 +6,12 @@ import 'package:prizey_vendor/views/screens/selectCategoryPage.dart';
 import 'package:provider/provider.dart';
 import 'utils/sizeConfig.dart';
 import 'views/appBar.dart';
+import 'views/screens/enterDetails.dart';
+import 'views/screens/loginPage.dart';
+import 'views/screens/numberSignUp.dart';
 import 'views/screens/profilePage.dart';
 import 'views/screens/requestsPage.dart';
+import 'views/screens/signUpOtp.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
@@ -20,10 +24,30 @@ class PrizeyVendorApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<UserAuth>(
+          create: (context) => UserAuth(),
+          child: LoginCheck(),
+        ),
+        ChangeNotifierProvider<UserAuth>(
+          create: (context) => UserAuth(),
+          child: PhoneNumber(),
+        ),
+        ChangeNotifierProvider<UserAuth>(
+          create: (context) => UserAuth(),
+          child: Password(),
+        ),
+        ChangeNotifierProvider<UserAuth>(
+          create: (context) => UserAuth(),
+          child: NameSignUp(),
+        ),
         ChangeNotifierProvider(
           create: (context) => UserAuth(),
           child: SelectCategory(),
-        )
+        ),
+        ChangeNotifierProvider<UserAuth>(
+          create: (context) => UserAuth(),
+          child: LoginPage(),
+        ),
       ],
       child: new MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -31,10 +55,32 @@ class PrizeyVendorApp extends StatelessWidget {
           primarySwatch: Colors.indigo,
           primaryColor: Colors.indigoAccent,
         ),
-        home: OptionsPage(),
+        home: LoginCheck(),
         // home: SelectCategory(),
       ),
     );
+  }
+}
+
+class LoginCheck extends StatefulWidget {
+  @override
+  _LoginCheckState createState() => _LoginCheckState();
+}
+
+class _LoginCheckState extends State<LoginCheck> {
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    UserAuth _auth = Provider.of<UserAuth>(context);
+    return FutureBuilder(
+        future: _auth.getUserStatusFromSP(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data) {
+            return MyApp();
+          } else {
+            return OptionsPage();
+          }
+        });
   }
 }
 

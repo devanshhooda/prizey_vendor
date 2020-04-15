@@ -29,7 +29,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
 
   @override
   Widget build(BuildContext context) {
-    // final userAuth = Provider.of<UserAuth>(context);
+    final userAuth = Provider.of<UserAuth>(context);
     return new Scaffold(
       body: new Container(
           height: SizeConfig.screenHeight,
@@ -121,14 +121,14 @@ class _PhoneNumberState extends State<PhoneNumber> {
                 SizedBox(
                   height: SizeConfig.safeBlockVertical * 2,
                 ),
-                // new Container(
-                //   padding: EdgeInsets.only(
-                //       left: SizeConfig.safeBlockHorizontal * 28),
-                //   child: new Text(
-                //     userAuth.sendOtpMsg,
-                //     style: TextStyle(color: Colors.red),
-                //   ),
-                // ),
+                new Container(
+                  padding: EdgeInsets.only(
+                      left: SizeConfig.safeBlockHorizontal * 28),
+                  child: new Text(
+                    userAuth.sendOtpMsg,
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
                 SizedBox(
                   height: SizeConfig.safeBlockVertical * 4,
                 ),
@@ -139,13 +139,13 @@ class _PhoneNumberState extends State<PhoneNumber> {
                       right: SizeConfig.safeBlockHorizontal * 30),
                   child: new RaisedButton(
                     onPressed: () async {
-                      // String phoneNumber = _number.text;
-                      // bool otpSent = await userAuth.sendOtp(phoneNumber);
-                      // if (otpSent) {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => Password()));
-                      print('OTP Screen');
-                      //   }
+                      String phoneNumber = _number.text;
+                      bool otpSent = await userAuth.sendOtp(phoneNumber);
+                      if (otpSent) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => Password()));
+                        print('OTP Screen');
+                      }
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),

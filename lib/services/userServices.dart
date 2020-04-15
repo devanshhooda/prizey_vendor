@@ -140,24 +140,17 @@ class UserAuth with ChangeNotifier {
     }
   }
 
-  Future<bool> createUser(String firstName, String lastName, String address,
-      List<String> categoryId) async {
+  String firstName, lastName, address;
+
+  Future<bool> createUser(List<String> categoryId) async {
     String addUserUrl = '$url' + '/api/user/adduser';
     try {
-      if (firstName.isNotEmpty && lastName.isNotEmpty && address.isNotEmpty) {
+      if (categoryId.isNotEmpty && categoryId != null) {
         token = await getTokenFromSP();
         print("Asked to create new User:");
         print(token);
         print('token : $token');
-        // var body = json.encode({
-        //   'type': 'Vendor',
-        //   'token': 'Firebase Token',
-        //   'firstName': firstName,
-        //   'lastName': lastName,
-        //   'address': address,
-        //   'categories': categgoryId,
-        // });
-        var category = json.encode(categoryId);
+        var categories = json.encode(categoryId);
         http.Response response = await http.post(
           addUserUrl,
           headers: <String, String>{
@@ -170,7 +163,7 @@ class UserAuth with ChangeNotifier {
             'firstName': firstName,
             'lastName': lastName,
             'address': address,
-            'categories': category,
+            'categories': categories,
           },
         );
         var data = json.decode(response.body);
@@ -185,7 +178,7 @@ class UserAuth with ChangeNotifier {
         }
         // print('Create new user method: ' + data);
       } else {
-        detailsPageMsg = 'Above Fields can\'t be empty';
+        detailsPageMsg = 'Select atleast one category first';
       }
       notifyListeners();
       if (userStatus == 'Success') {
@@ -233,33 +226,22 @@ class UserAuth with ChangeNotifier {
   }
 
   String getCategoriesStatus, getProdeuctsStatus;
-  // String categoryId, productId;
-  int noOfCategories;
 
   Future<List<CategoriesModel>> getCategories() async {
     String categoryUrl = url + '/api/category/list';
     List<CategoriesModel> categoriesList = List<CategoriesModel>();
     try {
-      // token = await getTokenFromSP();
-      // token =
-      //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlODlkMDJlNjRjM2NkMDYyMDE3OGQ0NyIsInR5cGUiOiJWZW5kb3IiLCJpYXQiOjE1ODYwOTAwMzB9.dXS0ykz14NgATxBxgcCtHA2lYHJF2ss60JO-PlqtZkQ';
       http.Response response =
-          await http.get(categoryUrl, headers: <String, String>{
-        'Authorization': 'jwt ' + token
-        // 'Authorization': 'jwt ' + _auth.token
-      });
+          await http.get(categoryUrl, headers: <String, String>{});
       var data = json.decode(response.body);
-      print(data.toString());
       List _categories;
       _categories = data['catgories'] as List;
-      print("Get All Categories");
-      print(_categories);
       for (var i in _categories) {
         CategoriesModel category = CategoriesModel(
             id: i['_id'], name: i['name'], imageUrl: i['image_url']);
         categoriesList.add(category);
       }
-      noOfCategories = data['count'];
+      // noOfCategories = data['count'];
       getCategoriesStatus = data['status'];
       // notifyListeners();
       // print('Categories list(auth): $categoriesList');
@@ -269,35 +251,33 @@ class UserAuth with ChangeNotifier {
     return categoriesList;
   }
 
-  Future<List<ProductsModel>> getProducts(String categoryId) async {
-    String categoryUrl = url + '/api/product/incategory?limit=5&id=$categoryId';
-    List<ProductsModel> productsList = List<ProductsModel>();
-    try {
-      token = await getTokenFromSP();
-      // token =
-      //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlODlkMDJlNjRjM2NkMDYyMDE3OGQ0NyIsInR5cGUiOiJWZW5kb3IiLCJpYXQiOjE1ODYwOTAwMzB9.dXS0ykz14NgATxBxgcCtHA2lYHJF2ss60JO-PlqtZkQ';
-      http.Response response =
-          await http.get(categoryUrl, headers: <String, String>{
-        'Authorization': 'jwt ' + token
-        // 'Authorization': 'jwt ' + _auth.token
-      });
-      var data = json.decode(response.body);
-      print(data);
-      List _products;
-      _products = data['products'] as List;
-      for (var i in _products) {
-        ProductsModel product = ProductsModel(
-            id: i['_id'], name: i['name'], imageUrl: i['image_url']);
-        productsList.add(product);
-      }
-      getProdeuctsStatus = data['status'];
-      print(getProdeuctsStatus);
-      print(productsList[0].name);
-      notifyListeners();
-      // print('Products list(auth): $productsList');
-    } catch (e) {
-      print(e);
-    }
-    return productsList;
-  }
+//   Future<List<ProductsModel>> getProducts(String categoryId) async {
+//     String categoryUrl = url + '/api/product/incategory?limit=5&id=$categoryId';
+//     List<ProductsModel> productsList = List<ProductsModel>();
+//     try {
+//       token = await getTokenFromSP();
+//       // token =
+//       //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlODlkMDJlNjRjM2NkMDYyMDE3OGQ0NyIsInR5cGUiOiJWZW5kb3IiLCJpYXQiOjE1ODYwOTAwMzB9.dXS0ykz14NgATxBxgcCtHA2lYHJF2ss60JO-PlqtZkQ';
+//       http.Response response =
+//           await http.get(categoryUrl, headers: <String, String>{
+//         'Authorization': 'jwt ' + token
+//         // 'Authorization': 'jwt ' + _auth.token
+//       });
+//       var data = json.decode(response.body);
+//       print(data);
+//       List _products;
+//       _products = data['products'] as List;
+//       for (var i in _products) {
+//         ProductsModel product = ProductsModel(
+//             id: i['_id'], name: i['name'], imageUrl: i['image_url']);
+//         productsList.add(product);
+//       }
+//       getProdeuctsStatus = data['status'];
+//       print(getProdeuctsStatus);
+//       print(productsList[0].name);
+//     } catch (e) {
+//       print(e);
+//     }
+//     return productsList;
+//   }
 }

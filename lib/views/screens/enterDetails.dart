@@ -3,7 +3,6 @@ import 'package:prizey_vendor/services/userServices.dart';
 import 'package:prizey_vendor/utils/sizeConfig.dart';
 import 'package:prizey_vendor/views/screens/selectCategoryPage.dart';
 import 'package:provider/provider.dart';
-import '../../main.dart';
 import 'loginPage.dart';
 
 class NameSignUp extends StatefulWidget {
@@ -38,15 +37,17 @@ class _NameSignUpState extends State<NameSignUp> {
     });
   }
 
-  // void detectError() {
-  //   setState(() {
-  //     errorMsg = "Above fields can't be empty";
-  //   });
-  // }
+  String errorMsg = '';
+
+  void detectError() {
+    setState(() {
+      errorMsg = "Above fields can't be empty";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    // final userAuth = Provider.of<UserAuth>(context);
+    final userAuth = Provider.of<UserAuth>(context);
     return new Scaffold(
       body: new Container(
           height: SizeConfig.screenHeight,
@@ -176,14 +177,14 @@ class _NameSignUpState extends State<NameSignUp> {
                             borderRadius: BorderRadius.circular(10))),
                   ),
                 ),
-                // new Container(
-                //   padding: EdgeInsets.only(
-                //       left: SizeConfig.safeBlockHorizontal * 30),
-                //   child: new Text(
-                //     userAuth.detailsPageMsg,
-                //     style: TextStyle(color: Colors.red),
-                //   ),
-                // ),
+                new Container(
+                  padding: EdgeInsets.only(
+                      left: SizeConfig.safeBlockHorizontal * 30),
+                  child: new Text(
+                    errorMsg,
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
                 SizedBox(
                   height: SizeConfig.safeBlockVertical * 3,
                 ),
@@ -194,18 +195,23 @@ class _NameSignUpState extends State<NameSignUp> {
                       right: SizeConfig.safeBlockHorizontal * 5),
                   child: new RaisedButton(
                     onPressed: () async {
-                      // String firstName = _firstName.text,
-                      //     lastName = _lastName.text,
-                      //     address = _address.text;
-                      // bool userCreated = await userAuth.createUser(
-                      //     firstName, lastName, address);
-                      // if (userCreated) {
+                      String firstName = _firstName.text,
+                          lastName = _lastName.text,
+                          address = _address.text;
+                      if (firstName.isNotEmpty &&
+                          lastName.isNotEmpty &&
+                          address.isNotEmpty) {
+                        userAuth.firstName = firstName;
+                        userAuth.lastName = lastName;
+                        userAuth.address = address;
                       Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (context) => SelectCategory()),
                       );
                       print('Select category Screen');
-                      // }
+                      } else {
+                        detectError();
+                      }
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),

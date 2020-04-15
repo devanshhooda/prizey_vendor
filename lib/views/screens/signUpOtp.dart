@@ -27,15 +27,9 @@ class _PasswordState extends State<Password> {
     });
   }
 
-  // void detectError() {
-  //   setState(() {
-  //     errorMsg = "Above field can't be empty";
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // final userAuth = Provider.of<UserAuth>(context);
+    final userAuth = Provider.of<UserAuth>(context);
     return new Scaffold(
       body: new Container(
           height: SizeConfig.screenHeight,
@@ -113,17 +107,17 @@ class _PasswordState extends State<Password> {
                 SizedBox(
                   height: SizeConfig.safeBlockVertical * 3,
                 ),
-                // new Container(
-                //   padding: EdgeInsets.only(
-                //       left: SizeConfig.safeBlockHorizontal * 30),
-                //   child: new Text(
-                //     (userAuth.verifyOtpStatus != null &&
-                //             userAuth.verifyOtpStatus.isNotEmpty)
-                //         ? userAuth.verifyOtpStatus
-                //         : userAuth.verifyOtpMsg,
-                //     style: TextStyle(color: Colors.red),
-                //   ),
-                // ),
+                new Container(
+                  padding: EdgeInsets.only(
+                      left: SizeConfig.safeBlockHorizontal * 30),
+                  child: new Text(
+                    (userAuth.verifyOtpStatus != null &&
+                            userAuth.verifyOtpStatus.isNotEmpty)
+                        ? userAuth.verifyOtpStatus
+                        : userAuth.verifyOtpMsg,
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
                 SizedBox(
                   height: SizeConfig.safeBlockVertical * 3,
                 ),
@@ -135,20 +129,20 @@ class _PasswordState extends State<Password> {
                   child: new RaisedButton(
                     onPressed: () async {
                       String otp = _pass.text;
-                      // bool otpVerified = await userAuth.verifyOtp(otp);
-                      // bool userExist = await userAuth.getRegisteredUser();
-                      // if (otpVerified) {
-                      //   if (userExist) {
-                      //     Navigator.of(context).pushAndRemoveUntil(
-                      //         MaterialPageRoute(builder: (context) => MyApp()),
-                      //         ModalRoute.withName(''));
-                      //     print('User exist hence logged in');
-                      //   } else {
+                      bool otpVerified = await userAuth.verifyOtp(otp);
+                      bool userExist = await userAuth.getRegisteredUser();
+                      if (otpVerified) {
+                        if (userExist) {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => MyApp()),
+                          ModalRoute.withName(''));
+                          print('User exist hence logged in');
+                        } else {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => NameSignUp()));
                       print('Enter details screen');
-                      //   }
-                      // }
+                        }
+                      }
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
