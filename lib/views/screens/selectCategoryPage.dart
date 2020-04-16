@@ -143,49 +143,62 @@ class _SelectCategoryState extends State<SelectCategory> {
   }
 
   Widget _categories(int i, String categoryId, String imageUrl) {
-    return new Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20), color: Colors.grey),
-      margin: EdgeInsets.all(5),
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          Container(
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.fill,
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _value[i] = !_value[i];
+          if (!_value[i]) {
+            selectedCategories.add(categoryId);
+          } else {
+            selectedCategories.remove(categoryId);
+          }
+        });
+      },
+      child: new Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20), color: Colors.grey),
+        margin: EdgeInsets.all(SizeConfig.safeBlockHorizontal * 1),
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            Container(
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.fill,
+              ),
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20)),
-              color: Colors.grey,
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20)),
+                color: Colors.grey,
+              ),
+              margin: EdgeInsets.only(
+                top: SizeConfig.safeBlockVertical * 16,
+              ),
+              child: CheckboxListTile(
+                  value: _value[i],
+                  title: new Text(
+                    categoriesTitle[i],
+                    style: TextStyle(
+                        fontSize: SizeConfig.safeBlockHorizontal * 3.7,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  onChanged: (val) {
+                    setState(() {
+                      _value[i] = val;
+                      if (val) {
+                        selectedCategories.add(categoryId);
+                      } else {
+                        selectedCategories.remove(categoryId);
+                      }
+                    });
+                  }),
             ),
-            margin: EdgeInsets.only(
-              top: 145,
-            ),
-            padding: EdgeInsets.only(top: 0),
-            child: CheckboxListTile(
-                value: _value[i],
-                title: new Text(
-                  categoriesTitle[i],
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
-                ),
-                onChanged: (val) {
-                  setState(() {
-                    _value[i] = val;
-                    if (val) {
-                      selectedCategories.add(categoryId);
-                    } else {
-                      selectedCategories.remove(categoryId);
-                    }
-                  });
-                }),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

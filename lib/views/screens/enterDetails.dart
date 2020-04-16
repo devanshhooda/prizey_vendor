@@ -17,25 +17,25 @@ class _NameSignUpState extends State<NameSignUp> {
   Color firstNameClr = Colors.black12;
   Color lastNameClr = Colors.black12;
 
-  void changeFirstNameColor(String input) {
-    setState(() {
-      if (input.isNotEmpty) {
-        firstNameClr = Colors.red[100];
-      } else {
-        firstNameClr = Colors.black12;
-      }
-    });
-  }
+  // void changeFirstNameColor(String input) {
+  //   setState(() {
+  //     if (input.isNotEmpty) {
+  //       firstNameClr = Colors.red[100];
+  //     } else {
+  //       firstNameClr = Colors.black12;
+  //     }
+  //   });
+  // }
 
-  void changeLastNameColor(String input) {
-    setState(() {
-      if (input.isNotEmpty) {
-        lastNameClr = Colors.red[100];
-      } else {
-        lastNameClr = Colors.black12;
-      }
-    });
-  }
+  // void changeLastNameColor(String input) {
+  //   setState(() {
+  //     if (input.isNotEmpty) {
+  //       lastNameClr = Colors.red[100];
+  //     } else {
+  //       lastNameClr = Colors.black12;
+  //     }
+  //   });
+  // }
 
   String errorMsg = '';
 
@@ -113,10 +113,10 @@ class _NameSignUpState extends State<NameSignUp> {
                             Icons.person,
                             size: SizeConfig.safeBlockVertical * 3,
                           )),
-                      onChanged: (String firstName) {
-                        firstName = _firstName.text;
-                        changeFirstNameColor(firstName);
-                      },
+                      // onChanged: (String firstName) {
+                      //   firstName = _firstName.text;
+                      //   changeFirstNameColor(firstName);
+                      // },
                     ),
                   ),
                 ),
@@ -151,10 +151,10 @@ class _NameSignUpState extends State<NameSignUp> {
                             Icons.person,
                             size: SizeConfig.safeBlockVertical * 3,
                           )),
-                      onChanged: (String lastName) {
-                        lastName = _lastName.text;
-                        changeLastNameColor(lastName);
-                      },
+                      // onChanged: (String lastName) {
+                      //   lastName = _lastName.text;
+                      //   changeLastNameColor(lastName);
+                      // },
                     ),
                   ),
                 ),
@@ -195,23 +195,23 @@ class _NameSignUpState extends State<NameSignUp> {
                       right: SizeConfig.safeBlockHorizontal * 5),
                   child: new RaisedButton(
                     onPressed: () async {
-                      String firstName = _firstName.text,
-                          lastName = _lastName.text,
-                          address = _address.text;
-                      if (firstName.isNotEmpty &&
-                          lastName.isNotEmpty &&
-                          address.isNotEmpty) {
-                        userAuth.firstName = firstName;
-                        userAuth.lastName = lastName;
-                        userAuth.address = address;
+                      // String firstName = _firstName.text,
+                      //     lastName = _lastName.text,
+                      //     address = _address.text;
+                      // if (firstName.isNotEmpty &&
+                      //     lastName.isNotEmpty &&
+                      //     address.isNotEmpty) {
+                      //   userAuth.firstName = firstName;
+                      //   userAuth.lastName = lastName;
+                      //   userAuth.address = address;
                       Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (context) => SelectCategory()),
                       );
                       print('Select category Screen');
-                      } else {
-                        detectError();
-                      }
+                      // } else {
+                      //   detectError();
+                      // }
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),

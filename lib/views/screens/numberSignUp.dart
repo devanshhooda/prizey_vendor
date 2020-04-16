@@ -17,15 +17,15 @@ class _PhoneNumberState extends State<PhoneNumber> {
       fontSize: SizeConfig.safeBlockHorizontal * 4, color: Colors.blue);
   Color nmbrClr = Colors.black12;
 
-  void changePhoneNumberColor(String input) {
-    setState(() {
-      if (input.isNotEmpty) {
-        nmbrClr = Colors.red[100];
-      } else {
-        nmbrClr = Colors.black12;
-      }
-    });
-  }
+  // void changePhoneNumberColor(String input) {
+  //   setState(() {
+  //     if (input.isNotEmpty) {
+  //       nmbrClr = Colors.red[100];
+  //     } else {
+  //       nmbrClr = Colors.black12;
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -112,10 +112,10 @@ class _PhoneNumberState extends State<PhoneNumber> {
                               Icons.phone,
                               size: SizeConfig.safeBlockVertical * 3,
                             )),
-                        onChanged: (String nmbr) {
-                          nmbr = _number.text;
-                          changePhoneNumberColor(nmbr);
-                        },
+                        // onChanged: (String nmbr) {
+                        //   nmbr = _number.text;
+                        // changePhoneNumberColor(nmbr);
+                        // },
                       ),
                     )),
                 SizedBox(
@@ -139,13 +139,13 @@ class _PhoneNumberState extends State<PhoneNumber> {
                       right: SizeConfig.safeBlockHorizontal * 30),
                   child: new RaisedButton(
                     onPressed: () async {
-                      String phoneNumber = _number.text;
-                      bool otpSent = await userAuth.sendOtp(phoneNumber);
-                      if (otpSent) {
+                      // String phoneNumber = _number.text;
+                      // bool otpSent = await userAuth.sendOtp(phoneNumber);
+                      // if (otpSent) {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => Password()));
                         print('OTP Screen');
-                      }
+                      // }
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
@@ -180,49 +180,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
                   height: SizeConfig.safeBlockVertical * 2,
                 ),
                 new Container(
-                    height: SizeConfig.blockSizeVertical * 8,
-                    padding: EdgeInsets.only(
-                        left: SizeConfig.safeBlockHorizontal * 10,
-                        right: SizeConfig.safeBlockHorizontal * 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    child: new Card(
-                      margin:
-                          EdgeInsets.all(SizeConfig.safeBlockHorizontal * 0.2),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40)),
-                      child: new MaterialButton(
-                        padding:
-                            EdgeInsets.all(SizeConfig.safeBlockHorizontal * 3),
-                        onPressed: () => print('Google Sign In method'),
-                        child: new Row(
-                          children: <Widget>[
-                            new CircleAvatar(
-                              radius: 30,
-                              backgroundColor: Colors.white,
-                              child: new Image.asset(
-                                'assets/gLogo.png',
-                                height: SizeConfig.blockSizeVertical * 5,
-                                width: SizeConfig.blockSizeHorizontal * 13.5,
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                            Padding(
-                                padding: EdgeInsets.only(
-                                    left: SizeConfig.safeBlockHorizontal * 2)),
-                            new Text(
-                              'Sign In with Google',
-                              style: TextStyle(
-                                  fontSize: SizeConfig.safeBlockHorizontal * 5),
-                            )
-                          ],
-                        ),
-                      ),
-                    )),
-                new Container(
                   padding: EdgeInsets.only(
-                    top: SizeConfig.safeBlockVertical * 4,
                     left: SizeConfig.safeBlockHorizontal * 17,
                   ),
                   child: new Row(
@@ -256,7 +214,7 @@ class _PhoneNumberState extends State<PhoneNumber> {
                 ),
                 new Container(
                   padding:
-                      EdgeInsets.only(top: SizeConfig.safeBlockVertical * 6),
+                      EdgeInsets.only(top: SizeConfig.safeBlockVertical * 10),
                   child: new Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[

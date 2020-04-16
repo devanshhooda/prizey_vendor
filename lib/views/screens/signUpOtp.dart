@@ -17,15 +17,15 @@ class _PasswordState extends State<Password> {
   Color passClr = Colors.black12;
   Color confirmPassClr = Colors.black12;
 
-  void changPassColor(String input) {
-    setState(() {
-      if (input.isNotEmpty) {
-        passClr = Colors.red[100];
-      } else {
-        passClr = Colors.black12;
-      }
-    });
-  }
+  // void changPassColor(String input) {
+  //   setState(() {
+  //     if (input.isNotEmpty) {
+  //       passClr = Colors.red[100];
+  //     } else {
+  //       passClr = Colors.black12;
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -98,10 +98,10 @@ class _PasswordState extends State<Password> {
                               Icons.vpn_key,
                               size: SizeConfig.safeBlockVertical * 3,
                             )),
-                        onChanged: (String pass) {
-                          pass = _pass.text;
-                          changPassColor(pass);
-                        },
+                        // onChanged: (String pass) {
+                        //   pass = _pass.text;
+                        //   changPassColor(pass);
+                        // },
                       ),
                     )),
                 SizedBox(
@@ -128,21 +128,21 @@ class _PasswordState extends State<Password> {
                       right: SizeConfig.safeBlockHorizontal * 25),
                   child: new RaisedButton(
                     onPressed: () async {
-                      String otp = _pass.text;
-                      bool otpVerified = await userAuth.verifyOtp(otp);
-                      bool userExist = await userAuth.getRegisteredUser();
-                      if (otpVerified) {
-                        if (userExist) {
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => MyApp()),
-                          ModalRoute.withName(''));
-                          print('User exist hence logged in');
-                        } else {
+                      // String otp = _pass.text;
+                      // bool otpVerified = await userAuth.verifyOtp(otp);
+                      // bool userExist = await userAuth.getRegisteredUser();
+                      // if (otpVerified) {
+                      //   if (userExist) {
+                      // Navigator.of(context).pushAndRemoveUntil(
+                      //     MaterialPageRoute(builder: (context) => MyApp()),
+                      //     ModalRoute.withName(''));
+                      //     print('User exist hence logged in');
+                      //   } else {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => NameSignUp()));
                       print('Enter details screen');
-                        }
-                      }
+                      //   }
+                      // }
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),

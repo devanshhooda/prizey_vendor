@@ -9,7 +9,7 @@ import 'numberSignUp.dart';
 TextStyle inputTextStyle = TextStyle(
     fontSize: SizeConfig.safeBlockHorizontal * 4.5,
     fontWeight: FontWeight.w600,
-    color: Colors.indigoAccent);
+    color: Colors.black);
 
 TextStyle hintStyle = TextStyle(fontSize: SizeConfig.safeBlockHorizontal * 4.5);
 
@@ -22,30 +22,28 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _phNum = new TextEditingController();
   TextEditingController _otp = new TextEditingController();
 
-  // String errorMsg = "";
-
   Color phnClr = Colors.black12;
   Color passClr = Colors.black12;
   bool isOtpSent = false;
-  void phoneChangeColor(String input) {
-    setState(() {
-      if (input.isNotEmpty) {
-        phnClr = Colors.red[100];
-      } else {
-        phnClr = Colors.black12;
-      }
-    });
-  }
+  // void phoneChangeColor(String input) {
+  //   setState(() {
+  //     if (input.isNotEmpty) {
+  //       phnClr = Colors.red[100];
+  //     } else {
+  //       phnClr = Colors.black12;
+  //     }
+  //   });
+  // }
 
-  void passChangeColor(String input) {
-    setState(() {
-      if (input.isNotEmpty) {
-        passClr = Colors.red[100];
-      } else {
-        passClr = Colors.black12;
-      }
-    });
-  }
+  // void passChangeColor(String input) {
+  //   setState(() {
+  //     if (input.isNotEmpty) {
+  //       passClr = Colors.red[100];
+  //     } else {
+  //       passClr = Colors.black12;
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -116,10 +114,10 @@ class _LoginPageState extends State<LoginPage> {
                         size: SizeConfig.safeBlockVertical * 3.5,
                       ),
                     ),
-                    onChanged: (String phn) {
-                      phn = _phNum.text;
-                      phoneChangeColor(phn);
-                    },
+                    // onChanged: (String phn) {
+                    //   phn = _phNum.text;
+                    //   phoneChangeColor(phn);
+                    // },
                   )),
             ),
             SizedBox(
@@ -183,10 +181,10 @@ class _LoginPageState extends State<LoginPage> {
                       size: SizeConfig.safeBlockVertical * 3,
                     ),
                   ),
-                  onChanged: (String otp) {
-                    otp = _otp.text;
-                    passChangeColor(otp);
-                  },
+                  // onChanged: (String otp) {
+                  //   otp = _otp.text;
+                  //   passChangeColor(otp);
+                  // },
                 ),
               ),
             ),

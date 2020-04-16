@@ -53,7 +53,8 @@ class PrizeyVendorApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.indigo,
-          primaryColor: Colors.indigoAccent,
+          // primaryColor: Colors.indigoAccent,
+          primaryColor: Colors.black
         ),
         home: LoginCheck(),
         // home: SelectCategory(),
