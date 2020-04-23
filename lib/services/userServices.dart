@@ -148,12 +148,14 @@ class UserAuth with ChangeNotifier {
     try {
       if (categoryId.isNotEmpty && categoryId != null) {
         token = await getTokenFromSP();
+        String firebaseToken = await firebaseMessaging.getToken();
         print("Asked to create new User:");
         print(token);
+        print('firebase token : $firebaseToken');
         print('token : $token');
         var body = json.encode({
           'type': 'Vendor',
-          'token': 'Firebase Token',
+          'token': firebaseToken,
           'firstName': firstName,
           'lastName': lastName,
           'address': address,

@@ -14,7 +14,6 @@ class _SelectCategoryState extends State<SelectCategory> {
   List<String> categoriesTitle = List<String>();
   List<String> selectedCategories = List<String>();
   List<bool> _value = List<bool>();
-
   @override
   Widget build(BuildContext context) {
     UserAuth service = Provider.of<UserAuth>(context);
@@ -145,9 +144,10 @@ class _SelectCategoryState extends State<SelectCategory> {
   Widget _categories(int i, String categoryId, String imageUrl) {
     return GestureDetector(
       onTap: () {
+        print('pressed');
         setState(() {
           _value[i] = !_value[i];
-          if (!_value[i]) {
+          if (_value[i]) {
             selectedCategories.add(categoryId);
           } else {
             selectedCategories.remove(categoryId);
