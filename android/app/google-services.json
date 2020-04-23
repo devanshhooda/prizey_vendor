@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "299996923168",
+    "firebase_url": "https://service-e25c9.firebaseio.com",
+    "project_id": "service-e25c9",
+    "storage_bucket": "service-e25c9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299996923168:android:7744222bf0fa9e91670345",
+        "android_client_info": {
+          "package_name": "com.example.fabo_example_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "299996923168-6lsb7k0os0trhatjv4ihknb0qi85ee7l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdMdisBFee5aTdYplE09N486sv-TdNJes"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "299996923168-6lsb7k0os0trhatjv4ihknb0qi85ee7l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299996923168:android:1fac37f4236bfd56670345",
+        "android_client_info": {
+          "package_name": "com.example.fcm_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "299996923168-6lsb7k0os0trhatjv4ihknb0qi85ee7l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdMdisBFee5aTdYplE09N486sv-TdNJes"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "299996923168-6lsb7k0os0trhatjv4ihknb0qi85ee7l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299996923168:android:2ec68c4a966eb24a670345",
+        "android_client_info": {
+          "package_name": "com.example.prizey_vendor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "299996923168-6lsb7k0os0trhatjv4ihknb0qi85ee7l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdMdisBFee5aTdYplE09N486sv-TdNJes"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "299996923168-6lsb7k0os0trhatjv4ihknb0qi85ee7l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:prizey_vendor/models/categoriesModel.dart';
 import 'package:prizey_vendor/models/productsModel.dart';
@@ -158,14 +159,12 @@ class UserAuth with ChangeNotifier {
           'address': address,
           'categories': categoryId
         });
-        http.Response response = await http.post(
-          addUserUrl,
-          headers: <String, String>{
-            'Authorization': 'jwt ' + token,
-            'Content-type': 'application/json'
-          },
-          body: body
-        );
+        http.Response response = await http.post(addUserUrl,
+            headers: <String, String>{
+              'Authorization': 'jwt ' + token,
+              'Content-type': 'application/json'
+            },
+            body: body);
         var data = json.decode(response.body);
         print("Create User Request: ");
         print(data);
@@ -251,33 +250,50 @@ class UserAuth with ChangeNotifier {
     return categoriesList;
   }
 
-//   Future<List<ProductsModel>> getProducts(String categoryId) async {
-//     String categoryUrl = url + '/api/product/incategory?limit=5&id=$categoryId';
-//     List<ProductsModel> productsList = List<ProductsModel>();
-//     try {
-//       token = await getTokenFromSP();
-//       // token =
-//       //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlODlkMDJlNjRjM2NkMDYyMDE3OGQ0NyIsInR5cGUiOiJWZW5kb3IiLCJpYXQiOjE1ODYwOTAwMzB9.dXS0ykz14NgATxBxgcCtHA2lYHJF2ss60JO-PlqtZkQ';
-//       http.Response response =
-//           await http.get(categoryUrl, headers: <String, String>{
-//         'Authorization': 'jwt ' + token
-//         // 'Authorization': 'jwt ' + _auth.token
-//       });
-//       var data = json.decode(response.body);
-//       print(data);
-//       List _products;
-//       _products = data['products'] as List;
-//       for (var i in _products) {
-//         ProductsModel product = ProductsModel(
-//             id: i['_id'], name: i['name'], imageUrl: i['image_url']);
-//         productsList.add(product);
-//       }
-//       getProdeuctsStatus = data['status'];
-//       print(getProdeuctsStatus);
-//       print(productsList[0].name);
-//     } catch (e) {
-//       print(e);
-//     }
-//     return productsList;
-//   }
+  FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
+
+  UserAuth() {
+    firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print('onMessage : $message');
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print('onLaunch : $message');
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print('onResume : $message');
+      },
+    );
+  }
+
+  String responseQueryMessage = '';
+
+  Future<bool> respondQuery(
+      String queryId, String price, String message) async {
+    try {
+      String respondQueryUrl = url + '/api/query/reply';
+      token = await getTokenFromSP();
+      http.Response response =
+          await http.post(respondQueryUrl, headers: <String, String>{
+        'Authorization': 'jwt ' + token,
+      }, body: {
+        'query': queryId,
+        'price': price,
+        'message': message
+      });
+      var data = json.decode(response.body);
+
+      String responseQueryStatus = data['status'];
+      responseQueryMessage = data['message'];
+      if (responseQueryStatus == 'Success') {
+        notifyListeners();
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }

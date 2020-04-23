@@ -128,21 +128,21 @@ class _PasswordState extends State<Password> {
                       right: SizeConfig.safeBlockHorizontal * 25),
                   child: new RaisedButton(
                     onPressed: () async {
-                      // String otp = _pass.text;
-                      // bool otpVerified = await userAuth.verifyOtp(otp);
-                      // bool userExist = await userAuth.getRegisteredUser();
-                      // if (otpVerified) {
-                      //   if (userExist) {
-                      // Navigator.of(context).pushAndRemoveUntil(
-                      //     MaterialPageRoute(builder: (context) => MyApp()),
-                      //     ModalRoute.withName(''));
-                      //     print('User exist hence logged in');
-                      //   } else {
+                      String otp = _pass.text;
+                      bool otpVerified = await userAuth.verifyOtp(otp);
+                      bool userExist = await userAuth.getRegisteredUser();
+                      if (otpVerified) {
+                        if (userExist) {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => MyApp()),
+                          ModalRoute.withName(''));
+                          print('User exist hence logged in');
+                        } else {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => NameSignUp()));
                       print('Enter details screen');
-                      //   }
-                      // }
+                        }
+                      }
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),

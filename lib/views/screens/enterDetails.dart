@@ -195,23 +195,23 @@ class _NameSignUpState extends State<NameSignUp> {
                       right: SizeConfig.safeBlockHorizontal * 5),
                   child: new RaisedButton(
                     onPressed: () async {
-                      // String firstName = _firstName.text,
-                      //     lastName = _lastName.text,
-                      //     address = _address.text;
-                      // if (firstName.isNotEmpty &&
-                      //     lastName.isNotEmpty &&
-                      //     address.isNotEmpty) {
-                      //   userAuth.firstName = firstName;
-                      //   userAuth.lastName = lastName;
-                      //   userAuth.address = address;
+                      String firstName = _firstName.text,
+                          lastName = _lastName.text,
+                          address = _address.text;
+                      if (firstName.isNotEmpty &&
+                          lastName.isNotEmpty &&
+                          address.isNotEmpty) {
+                        userAuth.firstName = firstName;
+                        userAuth.lastName = lastName;
+                        userAuth.address = address;
                       Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (context) => SelectCategory()),
                       );
                       print('Select category Screen');
-                      // } else {
-                      //   detectError();
-                      // }
+                      } else {
+                        detectError();
+                      }
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),

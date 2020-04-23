@@ -139,13 +139,13 @@ class _PhoneNumberState extends State<PhoneNumber> {
                       right: SizeConfig.safeBlockHorizontal * 30),
                   child: new RaisedButton(
                     onPressed: () async {
-                      // String phoneNumber = _number.text;
-                      // bool otpSent = await userAuth.sendOtp(phoneNumber);
-                      // if (otpSent) {
+                      String phoneNumber = _number.text;
+                      bool otpSent = await userAuth.sendOtp(phoneNumber);
+                      if (otpSent) {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => Password()));
                         print('OTP Screen');
-                      // }
+                      }
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
