@@ -175,7 +175,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                 color: Colors.grey,
               ),
               margin: EdgeInsets.only(
-                top: SizeConfig.safeBlockVertical * 16,
+                top: SizeConfig.safeBlockVertical * 17,
               ),
               child: CheckboxListTile(
                   value: _value[i],

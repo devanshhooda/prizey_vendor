@@ -210,7 +210,10 @@ class _LoginPageState extends State<LoginPage> {
                     } else {
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
-                              builder: (context) => PhoneNumber()),
+                              builder: (context) => ChangeNotifierProvider(
+                                    create: (context) => UserAuth(),
+                                    child: PhoneNumber(),
+                                  )),
                           ModalRoute.withName('/'));
                       print('User does\'t exist hence sign up screen');
                     }

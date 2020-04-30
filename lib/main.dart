@@ -2,18 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:prizey_vendor/services/userServices.dart';
 import 'package:prizey_vendor/views/screens/options.dart';
-import 'package:prizey_vendor/views/screens/selectCategoryPage.dart';
 import 'package:provider/provider.dart';
 import 'utils/sizeConfig.dart';
 import 'views/appBar.dart';
-import 'views/screens/enterDetails.dart';
-import 'views/screens/loginPage.dart';
-import 'views/screens/numberSignUp.dart';
 import 'views/screens/profilePage.dart';
 import 'views/screens/requestsPage.dart';
-import 'views/screens/signUpOtp.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   runApp(PrizeyVendorApp());
@@ -22,42 +18,11 @@ void main() {
 class PrizeyVendorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<UserAuth>(
-          create: (context) => UserAuth(),
-          child: LoginCheck(),
-        ),
-        ChangeNotifierProvider<UserAuth>(
-          create: (context) => UserAuth(),
-          child: PhoneNumber(),
-        ),
-        ChangeNotifierProvider<UserAuth>(
-          create: (context) => UserAuth(),
-          child: Password(),
-        ),
-        ChangeNotifierProvider<UserAuth>(
-          create: (context) => UserAuth(),
-          child: NameSignUp(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => UserAuth(),
-          child: SelectCategory(),
-        ),
-        ChangeNotifierProvider<UserAuth>(
-          create: (context) => UserAuth(),
-          child: LoginPage(),
-        ),
-      ],
-      child: new MaterialApp(
+    return ChangeNotifierProvider(
+      create: (context) => UserAuth(),
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.indigo,
-          // primaryColor: Colors.indigoAccent,
-          primaryColor: Colors.black
-        ),
         home: LoginCheck(),
-        // home: SelectCategory(),
       ),
     );
   }

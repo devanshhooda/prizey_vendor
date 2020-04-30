@@ -1,9 +1,10 @@
 import 'dart:convert';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:prizey_vendor/data/database.dart';
 import 'package:prizey_vendor/models/categoriesModel.dart';
 import 'package:prizey_vendor/models/productsModel.dart';
+import 'package:prizey_vendor/models/queryModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,11 +27,11 @@ class UserAuth with ChangeNotifier {
         http.Response response = await http.post(sendOtpUrl,
             body: {'mobile': phoneNumber, 'medium': 'SMS', 'type': 'Vendor'});
         var data = json.decode(response.body);
-        print("Get Send Otp Request:");
-        print(data);
+        // print("Get Send Otp Request:");
+        // print(data);
         if (data != null) {
           sendOtpStatus = data['status'];
-          print('send-otp status : $sendOtpStatus');
+          // print('send-otp status : $sendOtpStatus');
           token = data['token'];
           await addTokenToSP(token);
         }
@@ -61,11 +62,11 @@ class UserAuth with ChangeNotifier {
           body: {'otp': otp, 'medium': 'SMS'},
         );
         var data = json.decode(response.body);
-        print("Get Verify OTP Request: ");
-        print(data);
+        // print("Get Verify OTP Request: ");
+        // print(data);
         if (data != null) {
           verifyOtpStatus = data['status'];
-          print('verify-otp status : $verifyOtpStatus');
+          // print('verify-otp status : $verifyOtpStatus');
           token = data['token'];
           await addTokenToSP(token);
         }
@@ -92,11 +93,11 @@ class UserAuth with ChangeNotifier {
       http.Response response = await http.get(checkPhoneUrl,
           headers: <String, String>{'Authorization': 'jwt ' + token});
       var data = json.decode(response.body);
-      print("Get Registered User: ");
-      print(data);
+      // print("Get Registered User: ");
+      // print(data);
       if (data != null) {
         userStatus = data['status'];
-        print('user status : $userStatus');
+        // print('user status : $userStatus');
         userDetails = data['user'];
         token = data['token'];
       }
@@ -148,11 +149,10 @@ class UserAuth with ChangeNotifier {
     try {
       if (categoryId.isNotEmpty && categoryId != null) {
         token = await getTokenFromSP();
-        String firebaseToken = await firebaseMessaging.getToken();
-        print("Asked to create new User:");
-        print(token);
-        print('firebase token : $firebaseToken');
-        print('token : $token');
+        // print("Asked to create new User:");
+        // print(token);
+        // print('firebase token : $firebaseToken');
+        // print('token : $token');
         var body = json.encode({
           'type': 'Vendor',
           'token': firebaseToken,
@@ -168,11 +168,11 @@ class UserAuth with ChangeNotifier {
             },
             body: body);
         var data = json.decode(response.body);
-        print("Create User Request: ");
-        print(data);
+        // print("Create User Request: ");
+        // print(data);
         if (data != null) {
           userStatus = data['status'];
-          print('user status : $userStatus');
+          // print('user status : $userStatus');
           userDetails = data['user'];
           token = data['token'];
           await addTokenToSP(token);
@@ -195,7 +195,7 @@ class UserAuth with ChangeNotifier {
   }
 
   addTokenToSP(String token) async {
-    print("Add Token: $token");
+    // print("Add Token: $token");
     if (sharedPreferences == null) {
       sharedPreferences = await SharedPreferences.getInstance();
     }
@@ -207,7 +207,9 @@ class UserAuth with ChangeNotifier {
       sharedPreferences = await SharedPreferences.getInstance();
     }
     String _token = sharedPreferences.getString('token');
-    print("Get Token: $_token");
+    firebaseToken = await firebaseMessaging.getToken();
+    // print('fcm token : $firebaseToken');
+    // print("Get Token: $_token");
     return _token;
   }
 
@@ -226,7 +228,7 @@ class UserAuth with ChangeNotifier {
     return _status;
   }
 
-  String getCategoriesStatus, getProdeuctsStatus;
+  String getCategoriesStatus, getProdeuctsStatus, getQueyProductStatus;
 
   Future<List<CategoriesModel>> getCategories() async {
     String categoryUrl = url + '/api/category/list';
@@ -253,10 +255,14 @@ class UserAuth with ChangeNotifier {
   }
 
   FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
+  String firebaseToken;
+
+  DatabaseHelper databaseHelper = new DatabaseHelper(); // database handler
 
   UserAuth() {
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
+        onReceiveQuery(message);
         print('onMessage : $message');
       },
       onLaunch: (Map<String, dynamic> message) async {
@@ -266,6 +272,55 @@ class UserAuth with ChangeNotifier {
         print('onResume : $message');
       },
     );
+  }
+
+  Future onReceiveQuery(var query) async {
+    try {
+      QueryModel queryModel = QueryModel(
+          queryId: query['query_id'],
+          productId: query['product_id'],
+          categoryId: query['category_id'],
+          productName: query['productName']);
+      var databaseResult = await databaseHelper.insertQuery(queryModel);
+      print('inserQuery : $databaseResult');
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<List<QueryModel>> getQueries() async {
+    try {
+      List<QueryModel> queriesList = await databaseHelper.getQueriesList();
+      return queriesList;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<ProductsModel> getQueryProduct(String productId) async {
+    String productsUrl = url + '/api/product/details?id=$productId';
+    ProductsModel product;
+    // print('product id : $productId');
+    try {
+      token = await getTokenFromSP();
+      http.Response response = await http.get(productsUrl,
+          headers: <String, String>{'Authorization': 'jwt ' + token});
+      var data = json.decode(response.body);
+      // print('product data : $data');
+      product = ProductsModel(
+        id: data['product']['_id'],
+        name: data['product']['name'],
+        imageUrl: data['product']['image_url'],
+        features: data['product']['features'],
+        // categoryId: data['products']['category'][0],
+      );
+      getQueyProductStatus = data['status'];
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+    // print('product : $product');
+    return product;
   }
 
   String responseQueryMessage = '';
@@ -289,6 +344,8 @@ class UserAuth with ChangeNotifier {
       responseQueryMessage = data['message'];
       if (responseQueryStatus == 'Success') {
         notifyListeners();
+        var databaseResult = databaseHelper.deleteQuery(queryId);
+        print('deleteQuery : $databaseResult');
         return true;
       } else {
         return false;

@@ -143,7 +143,10 @@ class _PhoneNumberState extends State<PhoneNumber> {
                       bool otpSent = await userAuth.sendOtp(phoneNumber);
                       if (otpSent) {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => Password()));
+                            builder: (context) => ChangeNotifierProvider(
+                                  create: (context) => UserAuth(),
+                                  child: Password(),
+                                )));
                         print('OTP Screen');
                       }
                     },
@@ -196,7 +199,10 @@ class _PhoneNumberState extends State<PhoneNumber> {
                       new GestureDetector(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => LoginPage()));
+                              builder: (context) => ChangeNotifierProvider(
+                                    create: (context) => UserAuth(),
+                                    child: LoginPage(),
+                                  )));
                           print('Login Page');
                         },
                         child: new Text(

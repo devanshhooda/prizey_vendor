@@ -133,14 +133,17 @@ class _PasswordState extends State<Password> {
                       bool userExist = await userAuth.getRegisteredUser();
                       if (otpVerified) {
                         if (userExist) {
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => MyApp()),
-                          ModalRoute.withName(''));
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(builder: (context) => MyApp()),
+                              ModalRoute.withName(''));
                           print('User exist hence logged in');
                         } else {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => NameSignUp()));
-                      print('Enter details screen');
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ChangeNotifierProvider(
+                                    create: (context) => UserAuth(),
+                                    child: NameSignUp(),
+                                  )));
+                          print('Enter details screen');
                         }
                       }
                     },
