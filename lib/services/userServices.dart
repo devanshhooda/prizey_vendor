@@ -105,6 +105,7 @@ class UserAuth with ChangeNotifier {
       // print('Get registered method: ' + data);
       if (userStatus == 'Success') {
         await addTokenToSP(token);
+        await addUserStatusToSP();
         return true;
       } else {
         return false;
@@ -262,6 +263,7 @@ class UserAuth with ChangeNotifier {
   UserAuth() {
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
+        print('onMessage : $message');
         onReceiveQuery(message);
         print('onMessage : $message');
       },
@@ -276,13 +278,15 @@ class UserAuth with ChangeNotifier {
 
   Future onReceiveQuery(var query) async {
     try {
+      var data = query['data'];
       QueryModel queryModel = QueryModel(
-          queryId: query['query_id'],
-          productId: query['product_id'],
-          categoryId: query['category_id'],
-          productName: query['productName']);
+          queryId: data['query'],
+          productId: data['product'],
+          categoryId: data['category'],
+          productName: data['productName']);
+      print('queryId : ${queryModel.queryId}');
       var databaseResult = await databaseHelper.insertQuery(queryModel);
-      print('inserQuery : $databaseResult');
+      // print('inserQuery : $databaseResult');
     } catch (e) {
       print(e);
     }
@@ -291,6 +295,7 @@ class UserAuth with ChangeNotifier {
   Future<List<QueryModel>> getQueries() async {
     try {
       List<QueryModel> queriesList = await databaseHelper.getQueriesList();
+      // print('queriesList : ${q}');
       return queriesList;
     } catch (e) {
       print(e);

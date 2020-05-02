@@ -12,6 +12,7 @@ class DatabaseHelper {
   String productName = 'product_name';
   String categoryId = 'category_id';
   QueryModel queryModel;
+  int primaryKey;
   // DatabaseHelper._createInstance({this.queryModel});
 
   DatabaseHelper._createInstance();
@@ -42,8 +43,9 @@ class DatabaseHelper {
   }
 
   void _onCreate(Database database, int version) async {
-    await database.execute('''CREATE TABEL $queryTable(
-        $queryId TEXT PRIMARY KEY,
+    await database.execute('''CREATE TABLE $queryTable(
+        $primaryKey INTEGER PRIMARY KEY AUTOINCREMENT, 
+        $queryId TEXT,
         $productId TEXT NOT NULL,
         $productName TEXT,
         $categoryId TEXT
@@ -60,7 +62,9 @@ class DatabaseHelper {
 
   Future insertQuery(QueryModel queryModel) async {
     Database db = await this.database;
-    var result = db.insert(queryTable, queryModel.toMap());
+    var queryMap = queryModel.toMap();
+    print('queryMap : $queryMap');
+    var result = db.insert(queryTable, queryMap);
 
     return result;
   }

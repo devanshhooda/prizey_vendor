@@ -31,18 +31,24 @@ class _RequestsState extends State<Requests> {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<QueryModel>> snapshot) {
                   if (snapshot.hasData) {
-                    return ListView.builder(
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (BuildContext context, int i) {
-                        String productId = snapshot.data[i].productId;
-                        String queryId = snapshot.data[i].queryId;
-                        String categoryId = snapshot.data[i].categoryId;
-                        return QueryDetails(
-                          productId: productId,
-                          categoryId: categoryId,
-                          queryId: queryId,
-                        );
-                      },
+                    if (snapshot.data.length != null &&
+                        snapshot.data.length > 0) {
+                      return ListView.builder(
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (BuildContext context, int i) {
+                          String productId = snapshot.data[i].productId;
+                          String queryId = snapshot.data[i].queryId;
+                          String categoryId = snapshot.data[i].categoryId;
+                          return QueryDetails(
+                            productId: productId,
+                            categoryId: categoryId,
+                            queryId: queryId,
+                          );
+                        },
+                      );
+                    }
+                    return Center(
+                      child: Text('No requests till now'),
                     );
                   }
                   return Center(
@@ -77,34 +83,38 @@ class _QueryDetailsState extends State<QueryDetails> {
           FutureBuilder<ProductsModel>(
               future: productContent.getQueryProduct(widget.productId),
               builder: (context, AsyncSnapshot<ProductsModel> snapshot) {
-                String productName = snapshot.data.name;
-                String features = snapshot.data.features;
-                String imageUrl = snapshot.data.imageUrl;
-                return new ListTile(
-                  leading: productPicture(imageUrl),
-                  title: new Container(
-                    child: Text(
-                      '$productName',
-                      style: TextStyle(
-                          fontSize: SizeConfig.safeBlockHorizontal * 4,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500),
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
-                  // subtitle: new Text(
-                  //   'Category: $categories',
-                  //   style: _subtitle,{snapshot.data.name}
-                  // ),
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Bookings(
-                              productName: productName,
-                              features: features,
-                              imageUrl: imageUrl,
-                              queryId: widget.queryId,
-                            )));
-                  },
+                if (snapshot.data != null) {
+                  if (snapshot.hasData) {
+                    String productName = snapshot.data.name;
+                    String features = snapshot.data.features;
+                    String imageUrl = snapshot.data.imageUrl;
+                    print('productName : $productName');
+                    return new ListTile(
+                      leading: productPicture(imageUrl),
+                      title: new Container(
+                        child: Text(
+                          '$productName',
+                          style: TextStyle(
+                              fontSize: SizeConfig.safeBlockHorizontal * 4,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => Bookings(
+                                  productName: productName,
+                                  features: features,
+                                  imageUrl: imageUrl,
+                                  queryId: widget.queryId,
+                                )));
+                      },
+                    );
+                  }
+                }
+                return Center(
+                  child: LinearProgressIndicator(),
                 );
               }),
           new Container(
@@ -124,9 +134,11 @@ class _QueryDetailsState extends State<QueryDetails> {
     return new Container(
       child: new CircleAvatar(
         radius: SizeConfig.blockSizeVertical * 4,
-        backgroundColor: Colors.grey[300],
-        child: FlutterLogo(
-          size: SizeConfig.blockSizeVertical * 5,
+        backgroundColor: Colors.white,
+        child: new Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: NetworkImage(imageUrl), fit: BoxFit.contain)),
         ),
       ),
     );

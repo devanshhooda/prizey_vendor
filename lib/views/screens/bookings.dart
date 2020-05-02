@@ -64,7 +64,7 @@ class _BookingsState extends State<Bookings> {
                               cursorWidth: 2,
                               cursorColor: Colors.indigo,
                               decoration: InputDecoration(
-                                hintText: 'Phone Number',
+                                hintText: 'Price',
                                 hintStyle: hintStyle,
                                 border: InputBorder.none,
                                 icon: Icon(
@@ -97,7 +97,7 @@ class _BookingsState extends State<Bookings> {
                               cursorWidth: 2,
                               cursorColor: Colors.indigo,
                               decoration: InputDecoration(
-                                hintText: 'Phone Number',
+                                hintText: 'Message(Optional)',
                                 hintStyle: hintStyle,
                                 border: InputBorder.none,
                                 icon: Icon(
@@ -137,15 +137,15 @@ class _BookingsState extends State<Bookings> {
               height: SizeConfig.blockSizeVertical * 3,
             ),
           ),
-          new Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                _sortButton('Distance'),
-                _sortButton('Price'),
-              ],
-            ),
-          ),
+          // new Container(
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.end,
+          //     children: <Widget>[
+                // _sortButton('Distance'),
+                // _sortButton('Price'),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );
@@ -199,21 +199,21 @@ class _BookingsState extends State<Bookings> {
     );
   }
 
-  Widget _sortButton(String sortingMethod) {
-    return new Container(
-      child: new FlatButton(
-          onPressed: () {},
-          child: new Row(
-            children: <Widget>[
-              Text(sortingMethod),
-              Padding(
-                  padding: EdgeInsets.only(
-                      left: SizeConfig.blockSizeHorizontal * 1)),
-              Icon(Icons.sort)
-            ],
-          )),
-    );
-  }
+  // Widget _sortButton(String sortingMethod) {
+  //   return new Container(
+  //     child: new FlatButton(
+  //         onPressed: () {},
+  //         child: new Row(
+  //           children: <Widget>[
+  //             Text(sortingMethod),
+  //             Padding(
+  //                 padding: EdgeInsets.only(
+  //                     left: SizeConfig.blockSizeHorizontal * 1)),
+  //             Icon(Icons.sort)
+  //           ],
+  //         )),
+  //   );
+  // }
 
   Widget _queryButton(BuildContext context, UserAuth query, String queryId,
       String price, String message) {
