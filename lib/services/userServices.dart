@@ -265,7 +265,7 @@ class UserAuth with ChangeNotifier {
       onMessage: (Map<String, dynamic> message) async {
         print('onMessage : $message');
         onReceiveQuery(message);
-        print('onMessage : $message');
+        // print('onMessage : $message');
       },
       onLaunch: (Map<String, dynamic> message) async {
         print('onLaunch : $message');
@@ -284,7 +284,7 @@ class UserAuth with ChangeNotifier {
           productId: data['product'],
           categoryId: data['category'],
           productName: data['productName']);
-      print('queryId : ${queryModel.queryId}');
+      // print('queryId : ${queryModel.queryId}');
       var databaseResult = await databaseHelper.insertQuery(queryModel);
       // print('inserQuery : $databaseResult');
     } catch (e) {

@@ -12,7 +12,7 @@ class DatabaseHelper {
   String productName = 'product_name';
   String categoryId = 'category_id';
   QueryModel queryModel;
-  int primaryKey;
+  String primaryKey = 'id';
   // DatabaseHelper._createInstance({this.queryModel});
 
   DatabaseHelper._createInstance();
@@ -44,8 +44,7 @@ class DatabaseHelper {
 
   void _onCreate(Database database, int version) async {
     await database.execute('''CREATE TABLE $queryTable(
-        $primaryKey INTEGER PRIMARY KEY AUTOINCREMENT, 
-        $queryId TEXT,
+        $queryId TEXT PRIMARY KEY,
         $productId TEXT NOT NULL,
         $productName TEXT,
         $categoryId TEXT
@@ -61,12 +60,16 @@ class DatabaseHelper {
   }
 
   Future insertQuery(QueryModel queryModel) async {
-    Database db = await this.database;
-    var queryMap = queryModel.toMap();
-    print('queryMap : $queryMap');
-    var result = db.insert(queryTable, queryMap);
-
-    return result;
+    bool proceed = await checkExistQuery(queryModel.queryId);
+    if (proceed) {
+      Database db = await this.database;
+      var queryMap = queryModel.toMap();
+      // print('queryMap : $queryMap');
+      var result = db.insert(queryTable, queryMap);
+      return result;
+    } else {
+      return null;
+    }
   }
 
   Future deleteQuery(String queryId) async {
@@ -75,6 +78,18 @@ class DatabaseHelper {
         .rawDelete('DELETE FROM $queryTable WHERE ${this.queryId} = $queryId');
 
     return result;
+  }
+
+  Future<bool> checkExistQuery(String queryId) async {
+    Database db = await this.database;
+    var result =
+        db.rawQuery('SELECT FROM $queryTable WHERE ${this.queryId} = $queryId');
+
+    if (result == null) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   Future<List<QueryModel>> getQueriesList() async {
