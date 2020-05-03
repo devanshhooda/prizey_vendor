@@ -34,87 +34,81 @@ class _BookingsState extends State<Bookings> {
       body: new Container(
         height: SizeConfig.screenHeight,
         width: SizeConfig.screenWidth,
-        child: new Column(
+        child: new ListView(
           children: <Widget>[
             _productPortion(),
 
             // Here is the reply column
-            Expanded(
-                flex: 5,
-                child: Container(
-                  child: Column(
-                    children: <Widget>[
-                      new Container(
+            // Expanded(
+            //     flex: 5,
+            // child:
+            Container(
+              child: Column(
+                children: <Widget>[
+                  new Container(
+                    padding: EdgeInsets.only(
+                      left: SizeConfig.safeBlockHorizontal * 7,
+                      right: SizeConfig.safeBlockHorizontal * 7,
+                    ),
+                    child: new Container(
+                        height: SizeConfig.blockSizeVertical * 6,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            color: Colors.black12),
                         padding: EdgeInsets.only(
-                          left: SizeConfig.safeBlockHorizontal * 7,
-                          right: SizeConfig.safeBlockHorizontal * 7,
-                        ),
-                        child: new Container(
-                            height: SizeConfig.blockSizeVertical * 6,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(40),
-                                color: Colors.black12),
-                            padding: EdgeInsets.only(
-                                left: SizeConfig.safeBlockHorizontal * 3,
-                                top: SizeConfig.safeBlockHorizontal * 0.5),
-                            child: new TextField(
-                              controller: _price,
-                              style: inputTextStyle,
-                              keyboardType: TextInputType.number,
-                              cursorWidth: 2,
-                              cursorColor: Colors.indigo,
-                              decoration: InputDecoration(
-                                hintText: 'Price',
-                                hintStyle: hintStyle,
-                                border: InputBorder.none,
-                                icon: Icon(
-                                  Icons.phone,
-                                  size: SizeConfig.safeBlockVertical * 3.5,
-                                ),
-                              ),
-                            )),
-                      ),
-                      SizedBox(
-                        height: SizeConfig.safeBlockVertical * 2,
-                      ),
-                      new Container(
-                        padding: EdgeInsets.only(
-                          left: SizeConfig.safeBlockHorizontal * 7,
-                          right: SizeConfig.safeBlockHorizontal * 7,
-                        ),
-                        child: new Container(
-                            height: SizeConfig.blockSizeVertical * 6,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(40),
-                                color: Colors.black12),
-                            padding: EdgeInsets.only(
-                                left: SizeConfig.safeBlockHorizontal * 3,
-                                top: SizeConfig.safeBlockHorizontal * 0.5),
-                            child: new TextField(
-                              controller: _message,
-                              style: inputTextStyle,
-                              keyboardType: TextInputType.number,
-                              cursorWidth: 2,
-                              cursorColor: Colors.indigo,
-                              decoration: InputDecoration(
-                                hintText: 'Message(Optional)',
-                                hintStyle: hintStyle,
-                                border: InputBorder.none,
-                                icon: Icon(
-                                  Icons.phone,
-                                  size: SizeConfig.safeBlockVertical * 3.5,
-                                ),
-                              ),
-                            )),
-                      ),
-                      SizedBox(
-                        height: SizeConfig.safeBlockVertical * 2,
-                      ),
-                      _queryButton(context, query, widget.queryId, _price.text,
-                          _message.text)
-                    ],
+                            left: SizeConfig.safeBlockHorizontal * 3,
+                            top: SizeConfig.safeBlockHorizontal * 0.5),
+                        child: new TextField(
+                          controller: _price,
+                          style: inputTextStyle,
+                          keyboardType: TextInputType.number,
+                          cursorWidth: 2,
+                          cursorColor: Colors.indigo,
+                          decoration: InputDecoration(
+                            hintText: 'Price',
+                            hintStyle: hintStyle,
+                            border: InputBorder.none,
+                            icon: Icon(
+                              Icons.phone,
+                              size: SizeConfig.safeBlockVertical * 3.5,
+                            ),
+                          ),
+                        )),
                   ),
-                ))
+                  SizedBox(
+                    height: SizeConfig.safeBlockVertical * 2,
+                  ),
+                  new Container(
+                    padding: EdgeInsets.only(
+                      left: SizeConfig.safeBlockHorizontal * 7,
+                      right: SizeConfig.safeBlockHorizontal * 7,
+                    ),
+                    child: Container(
+                      margin: EdgeInsets.all(SizeConfig.safeBlockVertical * 2),
+                      decoration: BoxDecoration(
+                          color: Colors.black12,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: TextField(
+                        minLines: 3,
+                        maxLines: 5,
+                        controller: _message,
+                        textCapitalization: TextCapitalization.words,
+                        decoration: InputDecoration(
+                            hintText: 'Message(Optional)',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: SizeConfig.safeBlockVertical * 2,
+                  ),
+                  _queryButton(context, query, widget.queryId, _price.text,
+                      _message.text)
+                ],
+              ),
+              // )
+            )
           ],
         ),
       ),
@@ -141,8 +135,8 @@ class _BookingsState extends State<Bookings> {
           //   child: Row(
           //     mainAxisAlignment: MainAxisAlignment.end,
           //     children: <Widget>[
-                // _sortButton('Distance'),
-                // _sortButton('Price'),
+          // _sortButton('Distance'),
+          // _sortButton('Price'),
           //     ],
           //   ),
           // ),
@@ -221,7 +215,7 @@ class _BookingsState extends State<Bookings> {
       height: SizeConfig.blockSizeVertical * 5.5,
       margin: EdgeInsets.symmetric(
           vertical: SizeConfig.safeBlockVertical * 5,
-          horizontal: SizeConfig.safeBlockHorizontal * 20),
+          horizontal: SizeConfig.safeBlockHorizontal * 15),
       child: new RaisedButton(
         onPressed: () async {
           bool querySent = await query.respondQuery(queryId, price, message);
@@ -238,6 +232,7 @@ class _BookingsState extends State<Bookings> {
         elevation: 0,
         color: Colors.green,
         child: new Container(
+          // padding: EdgeInsets.all(15),
           child: new Text(
             'Send Reply',
             style: TextStyle(

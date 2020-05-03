@@ -44,7 +44,8 @@ class DatabaseHelper {
 
   void _onCreate(Database database, int version) async {
     await database.execute('''CREATE TABLE $queryTable(
-        $queryId TEXT PRIMARY KEY,
+        $primaryKey INTEGER PRIMARY KEY AUTOINCREMENT,
+        $queryId TEXT NOT NULL,
         $productId TEXT NOT NULL,
         $productName TEXT,
         $categoryId TEXT
@@ -60,37 +61,37 @@ class DatabaseHelper {
   }
 
   Future insertQuery(QueryModel queryModel) async {
-    bool proceed = await checkExistQuery(queryModel.queryId);
-    if (proceed) {
-      Database db = await this.database;
-      var queryMap = queryModel.toMap();
-      // print('queryMap : $queryMap');
-      var result = db.insert(queryTable, queryMap);
-      return result;
-    } else {
-      return null;
-    }
+    // bool queryExist = await checkExistQuery(queryModel.queryId);
+    // if (queryExist) {
+    //   return null;
+    // } else {
+    Database db = await this.database;
+    var queryMap = queryModel.toMap();
+    // print('queryMap : $queryMap');
+    var result = db.insert(queryTable, queryMap);
+    return result;
+    // }
   }
 
   Future deleteQuery(String queryId) async {
     Database db = await this.database;
-    var result = db
-        .rawDelete('DELETE FROM $queryTable WHERE ${this.queryId} = $queryId');
+    var result = db.rawDelete(
+        'DELETE FROM $queryTable WHERE ${this.queryId} = ? ', [queryId]);
 
     return result;
   }
 
-  Future<bool> checkExistQuery(String queryId) async {
-    Database db = await this.database;
-    var result =
-        db.rawQuery('SELECT FROM $queryTable WHERE ${this.queryId} = $queryId');
-
-    if (result == null) {
-      return false;
-    } else {
-      return true;
-    }
-  }
+  // Future<bool> checkExistQuery(String queryId) async {
+  //   Database db = await this.database;
+  //   var result = db.rawQuery(
+  //       'SELECT * FROM $queryTable WHERE ${this.queryId} = ? ', [queryId]);
+  //   print(result.toString());
+  //   if (result == null) {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // }
 
   Future<List<QueryModel>> getQueriesList() async {
     var queryMapList = await _getQueriesMapList();
@@ -103,6 +104,7 @@ class DatabaseHelper {
       queriesList.add(QueryModel.fromMapObject(queryMapList[i]));
     }
 
+    // print(queriesList);
     return queriesList;
   }
 }

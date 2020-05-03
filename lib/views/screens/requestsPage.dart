@@ -88,7 +88,7 @@ class _QueryDetailsState extends State<QueryDetails> {
                     String productName = snapshot.data.name;
                     String features = snapshot.data.features;
                     String imageUrl = snapshot.data.imageUrl;
-                    print('productName : $productName');
+                    // print('productName : $productName');
                     return new ListTile(
                       leading: productPicture(imageUrl),
                       title: new Container(

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:prizey_vendor/utils/sizeConfig.dart';
 import 'screens/notifications.dart';
@@ -31,36 +30,39 @@ Widget app_Bar(BuildContext context) {
                     right: SizeConfig.safeBlockHorizontal * 5,
                     bottom: SizeConfig.safeBlockVertical * 0.5),
                 child: new Container(
-                  margin: EdgeInsets.only(
-                      bottom: SizeConfig.safeBlockVertical * 0.5,
-                      top: SizeConfig.safeBlockVertical * 0.5),
+                  height: SizeConfig.blockSizeVertical * 7,
+                  // margin: EdgeInsets.only(
+                  //     bottom: SizeConfig.safeBlockVertical * 0.5,
+                  //     top: SizeConfig.safeBlockVertical * 0.5),
                   decoration: BoxDecoration(
                     color: Colors.white70,
                     borderRadius: BorderRadius.circular(40),
                   ),
-                  child: new TextField(
-                      cursorColor: Colors.black,
-                      cursorWidth: 1.5,
-                      controller: _srch,
-                      style: TextStyle(
-                          fontSize: SizeConfig.safeBlockHorizontal * 4.5,
-                          color: Colors.black87),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintStyle: new TextStyle(
-                            color: Colors.black54,
-                            fontSize: SizeConfig.safeBlockHorizontal * 4,
-                            fontWeight: FontWeight.w500),
-                        hintText: 'Search',
-                        icon: Container(
-                            padding: EdgeInsets.only(
-                                left: SizeConfig.safeBlockHorizontal * 4),
-                            child: Icon(
-                              Icons.search,
+                  child: Center(
+                    child: new TextField(
+                        cursorColor: Colors.black,
+                        cursorWidth: 1.5,
+                        controller: _srch,
+                        style: TextStyle(
+                            fontSize: SizeConfig.safeBlockHorizontal * 4.5,
+                            color: Colors.black87),
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintStyle: new TextStyle(
                               color: Colors.black54,
-                              size: SizeConfig.safeBlockVertical * 2.5,
-                            )),
-                      )),
+                              fontSize: SizeConfig.safeBlockHorizontal * 4,
+                              fontWeight: FontWeight.w500),
+                          hintText: 'Search',
+                          icon: Container(
+                              padding: EdgeInsets.only(
+                                  left: SizeConfig.safeBlockHorizontal * 4),
+                              child: Icon(
+                                Icons.search,
+                                color: Colors.black54,
+                                size: SizeConfig.safeBlockVertical * 2.5,
+                              )),
+                        )),
+                  ),
                 )),
             preferredSize: Size.fromHeight(SizeConfig.blockSizeVertical * 3)),
         actions: <Widget>[
@@ -74,7 +76,7 @@ Widget app_Bar(BuildContext context) {
               },
               icon: Icon(
                 Icons.notifications_none,
-                size: SizeConfig.safeBlockVertical * 3,
+                size: SizeConfig.safeBlockVertical * 4,
               ),
             ),
             // new Positioned(

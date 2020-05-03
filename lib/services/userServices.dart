@@ -70,7 +70,7 @@ class UserAuth with ChangeNotifier {
           token = data['token'];
           await addTokenToSP(token);
         }
-        // print('Verify OTP method: ' + data);
+        print('Verify OTP method: ' + token);
       } else {
         verifyOtpMsg = 'Above Field can\'t be empty';
       }
@@ -97,19 +97,23 @@ class UserAuth with ChangeNotifier {
       // print(data);
       if (data != null) {
         userStatus = data['status'];
-        // print('user status : $userStatus');
+        print('getregisteredUser status : $userStatus');
         userDetails = data['user'];
         token = data['token'];
       }
+      await addTokenToSP(token);
+      print('getregisteredUser : $token');
       notifyListeners();
       // print('Get registered method: ' + data);
       if (userStatus == 'Success') {
-        await addTokenToSP(token);
-        await addUserStatusToSP();
-        return true;
-      } else {
-        return false;
+        bool userUpdated = await updateUserProfile();
+        print('userUpdated : $userUpdated');
+        if (userUpdated) {
+          await addUserStatusToSP();
+          return true;
+        }
       }
+      return false;
     } catch (e) {
       print(e);
       return false;
@@ -122,13 +126,40 @@ class UserAuth with ChangeNotifier {
       token = await getTokenFromSP();
       http.Response response = await http.post(profileFetchingUrl,
           headers: <String, String>{'Authorization': 'jwt ' + token},
-          body: {'type': 'Customer'});
+          body: {'type': 'Vendor'});
       var data = json.decode(response.body);
+      if (data != null) {
+        userStatus = data['status'];
+        // print('user status : $userStatus');
+        userDetails = data['user'];
+      }
+      notifyListeners();
+      // print('Get user profile method : ' + data);
+      if (userStatus == 'Success') {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> updateUserProfile() async {
+    String profileupdateUrl = '$url' + '/api/user/update';
+    try {
+      token = await getTokenFromSP();
+
+      http.Response response = await http.post(profileupdateUrl,
+          headers: <String, String>{'Authorization': 'jwt ' + token},
+          body: {'token': firebaseToken});
+      var data = json.decode(response.body);
+      print('update user: $data');
       if (data != null) {
         userStatus = data['status'];
         print('user status : $userStatus');
         userDetails = data['user'];
-        await addTokenToSP(token);
       }
       notifyListeners();
       // print('Get user profile method : ' + data);
@@ -152,8 +183,8 @@ class UserAuth with ChangeNotifier {
         token = await getTokenFromSP();
         // print("Asked to create new User:");
         // print(token);
-        // print('firebase token : $firebaseToken');
-        // print('token : $token');
+        print('firebase token : $firebaseToken');
+        print('token : $token');
         var body = json.encode({
           'type': 'Vendor',
           'token': firebaseToken,
@@ -209,7 +240,6 @@ class UserAuth with ChangeNotifier {
     }
     String _token = sharedPreferences.getString('token');
     firebaseToken = await firebaseMessaging.getToken();
-    // print('fcm token : $firebaseToken');
     // print("Get Token: $_token");
     return _token;
   }
@@ -274,6 +304,10 @@ class UserAuth with ChangeNotifier {
         print('onResume : $message');
       },
     );
+    firebaseMessaging.getToken().then((String _tokn) {
+      firebaseToken = _tokn;
+      // print('fcm tokn : $firebaseToken');
+    });
   }
 
   Future onReceiveQuery(var query) async {
@@ -299,6 +333,7 @@ class UserAuth with ChangeNotifier {
       return queriesList;
     } catch (e) {
       print(e);
+      return null;
     }
   }
 

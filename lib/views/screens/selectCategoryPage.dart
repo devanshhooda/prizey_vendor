@@ -144,7 +144,7 @@ class _SelectCategoryState extends State<SelectCategory> {
   Widget _categories(int i, String categoryId, String imageUrl) {
     return GestureDetector(
       onTap: () {
-        print('pressed');
+        // print('pressed');
         setState(() {
           _value[i] = !_value[i];
           if (_value[i]) {
