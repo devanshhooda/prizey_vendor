@@ -239,7 +239,6 @@ class UserAuth with ChangeNotifier {
       sharedPreferences = await SharedPreferences.getInstance();
     }
     String _token = sharedPreferences.getString('token');
-    firebaseToken = await firebaseMessaging.getToken();
     // print("Get Token: $_token");
     return _token;
   }
@@ -285,17 +284,20 @@ class UserAuth with ChangeNotifier {
     return categoriesList;
   }
 
-  FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
+  FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
   String firebaseToken;
 
   DatabaseHelper databaseHelper = new DatabaseHelper(); // database handler
-
+  int timeNow = 0;
   UserAuth() {
-    firebaseMessaging.configure(
+    _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print('onMessage : $message');
-        onReceiveQuery(message);
-        // print('onMessage : $message');
+        int newTime = DateTime.now().millisecondsSinceEpoch;
+        if (newTime - timeNow > 100) {
+          timeNow = newTime;
+          onReceiveQuery(message);
+        }
       },
       onLaunch: (Map<String, dynamic> message) async {
         print('onLaunch : $message');
@@ -304,7 +306,7 @@ class UserAuth with ChangeNotifier {
         print('onResume : $message');
       },
     );
-    firebaseMessaging.getToken().then((String _tokn) {
+    _firebaseMessaging.getToken().then((String _tokn) {
       firebaseToken = _tokn;
       // print('fcm tokn : $firebaseToken');
     });
@@ -370,6 +372,8 @@ class UserAuth with ChangeNotifier {
     try {
       String respondQueryUrl = url + '/api/query/reply';
       token = await getTokenFromSP();
+      print('price : $price');
+      print('message : $message');
       http.Response response =
           await http.post(respondQueryUrl, headers: <String, String>{
         'Authorization': 'jwt ' + token,

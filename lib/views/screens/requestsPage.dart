@@ -83,8 +83,8 @@ class _QueryDetailsState extends State<QueryDetails> {
           FutureBuilder<ProductsModel>(
               future: productContent.getQueryProduct(widget.productId),
               builder: (context, AsyncSnapshot<ProductsModel> snapshot) {
-                if (snapshot.data != null) {
-                  if (snapshot.hasData) {
+                if (snapshot.hasData) {
+                  if (snapshot.data != null) {
                     String productName = snapshot.data.name;
                     String features = snapshot.data.features;
                     String imageUrl = snapshot.data.imageUrl;
@@ -112,6 +112,11 @@ class _QueryDetailsState extends State<QueryDetails> {
                       },
                     );
                   }
+                  //   return Center(
+                  //   child: Text(
+                  //     'Network Error'
+                  //   )
+                  // );
                 }
                 return Center(
                   child: LinearProgressIndicator(),

@@ -14,16 +14,26 @@ class Bookings extends StatefulWidget {
 
 class _BookingsState extends State<Bookings> {
   UserAuth query;
-  TextEditingController _price = new TextEditingController();
-  TextEditingController _message = new TextEditingController();
+  TextEditingController _price;
+  TextEditingController _message;
   @override
   void initState() {
     query = UserAuth();
+    _price = new TextEditingController();
+    _message = new TextEditingController();
     super.initState();
   }
 
   @override
+  void dispose() {
+    _price.dispose();
+    _message.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // String price = '', message = '';
     return new Scaffold(
       appBar: new AppBar(
         title: new Text(
@@ -59,6 +69,11 @@ class _BookingsState extends State<Bookings> {
                             left: SizeConfig.safeBlockHorizontal * 3,
                             top: SizeConfig.safeBlockHorizontal * 0.5),
                         child: new TextField(
+                          // onChanged: (change) {
+                          //   setState(() {
+                          //     price += change;
+                          //   });
+                          // },
                           controller: _price,
                           style: inputTextStyle,
                           keyboardType: TextInputType.number,
@@ -92,7 +107,6 @@ class _BookingsState extends State<Bookings> {
                         minLines: 3,
                         maxLines: 5,
                         controller: _message,
-                        textCapitalization: TextCapitalization.words,
                         decoration: InputDecoration(
                             hintText: 'Message(Optional)',
                             border: OutlineInputBorder(
@@ -103,8 +117,7 @@ class _BookingsState extends State<Bookings> {
                   SizedBox(
                     height: SizeConfig.safeBlockVertical * 2,
                   ),
-                  _queryButton(context, query, widget.queryId, _price.text,
-                      _message.text)
+                  _queryButton(context, query, widget.queryId)
                 ],
               ),
               // )
@@ -209,8 +222,8 @@ class _BookingsState extends State<Bookings> {
   //   );
   // }
 
-  Widget _queryButton(BuildContext context, UserAuth query, String queryId,
-      String price, String message) {
+  Widget _queryButton(BuildContext context, UserAuth query, String queryId) {
+    String price, message;
     return Container(
       height: SizeConfig.blockSizeVertical * 5.5,
       margin: EdgeInsets.symmetric(
@@ -218,13 +231,20 @@ class _BookingsState extends State<Bookings> {
           horizontal: SizeConfig.safeBlockHorizontal * 15),
       child: new RaisedButton(
         onPressed: () async {
+          setState(() {
+            price = _price.text;
+            message = _message.text;
+          });
+          print('price button : $price');
+          print('message button : $message');
           bool querySent = await query.respondQuery(queryId, price, message);
           if (querySent) {
             // This snackbar is not showing
-            Scaffold.of(context).showSnackBar(SnackBar(
-              content: Text('Reply sent.. Thank you !'),
-              duration: Duration(seconds: 3),
-            ));
+            // Scaffold.of(context).showSnackBar(SnackBar(
+            //   content: Text('Reply sent.. Thank you !'),
+            //   duration: Duration(seconds: 3),
+            // ));
+            Navigator.of(context).pop();
             print('Reply Will be sent');
           }
         },
