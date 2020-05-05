@@ -100,8 +100,10 @@ class UserAuth with ChangeNotifier {
         print('getregisteredUser status : $userStatus');
         userDetails = data['user'];
         token = data['token'];
+        if (token != null) {
+          await addTokenToSP(token);
+        }
       }
-      await addTokenToSP(token);
       print('getregisteredUser : $token');
       notifyListeners();
       // print('Get registered method: ' + data);
@@ -301,15 +303,26 @@ class UserAuth with ChangeNotifier {
       },
       onLaunch: (Map<String, dynamic> message) async {
         print('onLaunch : $message');
+        int newTime = DateTime.now().millisecondsSinceEpoch;
+        if (newTime - timeNow > 100) {
+          timeNow = newTime;
+          onReceiveQuery(message);
+        }
       },
       onResume: (Map<String, dynamic> message) async {
         print('onResume : $message');
+        int newTime = DateTime.now().millisecondsSinceEpoch;
+        if (newTime - timeNow > 100) {
+          timeNow = newTime;
+          onReceiveQuery(message);
+        }
       },
     );
     _firebaseMessaging.getToken().then((String _tokn) {
       firebaseToken = _tokn;
       // print('fcm tokn : $firebaseToken');
     });
+    _firebaseMessaging.requestNotificationPermissions();
   }
 
   Future onReceiveQuery(var query) async {
