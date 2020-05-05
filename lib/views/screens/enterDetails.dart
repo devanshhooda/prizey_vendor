@@ -195,20 +195,35 @@ class _NameSignUpState extends State<NameSignUp> {
                       right: SizeConfig.safeBlockHorizontal * 5),
                   child: new RaisedButton(
                     onPressed: () async {
-                      String firstName = _firstName.text,
-                          lastName = _lastName.text,
-                          address = _address.text;
+                      String firstName, lastName, address;
+                      setState(() {
+                        firstName = _firstName.text;
+                        lastName = _lastName.text;
+                        address = _address.text;
+                      });
+                      print('firstName frontend : $firstName');
+                      print('lastName frontend : $lastName');
+                      print('address frontend : $address');
                       if (firstName.isNotEmpty &&
                           lastName.isNotEmpty &&
-                          address.isNotEmpty) {
-                        userAuth.firstName = firstName;
-                        userAuth.lastName = lastName;
-                        userAuth.address = address;
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => SelectCategory()),
-                      );
-                      print('Select category Screen');
+                          address.isNotEmpty &&
+                          firstName != null &&
+                          lastName != null &&
+                          address != null) {
+                        // setState(() {
+                        //   userAuth.firstName = firstName;
+                        //   userAuth.lastName = lastName;
+                        //   userAuth.address = address;
+                        // });
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => SelectCategory(
+                                    firstName: firstName,
+                                    lastName: lastName,
+                                    address: address,
+                                  )),
+                        );
+                        print('Select category Screen');
                       } else {
                         detectError();
                       }

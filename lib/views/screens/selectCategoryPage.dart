@@ -6,6 +6,8 @@ import 'package:prizey_vendor/utils/sizeConfig.dart';
 import 'package:provider/provider.dart';
 
 class SelectCategory extends StatefulWidget {
+  String firstName, lastName, address;
+  SelectCategory({this.address, this.lastName, this.firstName});
   @override
   _SelectCategoryState createState() => _SelectCategoryState();
 }
@@ -108,8 +110,11 @@ class _SelectCategoryState extends State<SelectCategory> {
                 height: SizeConfig.blockSizeVertical * 5.5,
                 child: new RaisedButton(
                   onPressed: () async {
-                    bool userCreated =
-                        await service.createUser(selectedCategories);
+                    bool userCreated = await service.createUser(
+                        selectedCategories,
+                        widget.firstName,
+                        widget.lastName,
+                        widget.address);
                     if (userCreated) {
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(builder: (context) => MyApp()),

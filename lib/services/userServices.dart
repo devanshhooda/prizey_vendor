@@ -176,11 +176,13 @@ class UserAuth with ChangeNotifier {
     }
   }
 
-  String firstName, lastName, address;
-
-  Future<bool> createUser(List<String> categoryId) async {
+  Future<bool> createUser(List<String> categoryId, String firstName,
+      String lastName, String address) async {
     String addUserUrl = '$url' + '/api/user/adduser';
     try {
+      print('firstName backend : $firstName');
+      print('lastName backend : $lastName');
+      print('address backend : $address');
       if (categoryId.isNotEmpty && categoryId != null) {
         token = await getTokenFromSP();
         // print("Asked to create new User:");
